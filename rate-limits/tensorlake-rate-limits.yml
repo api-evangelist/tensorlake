@@ -1,0 +1,57 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Tensorlake
+providerId: tensorlake
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Document Extraction
+- Document Ingestion
+- OCR
+- AI
+- Rate Limiting
+- Quotas
+description: >-
+  Tensorlake does not publish fixed numeric per-minute request-rate limits for
+  the Document Ingestion API. In practice throughput is governed by plan-level
+  concurrency (for example up to 2 concurrent sandboxes on Free, up to 100 on
+  On-Demand, and up to 1,000 on Pro) and by the credit / page allowance of the
+  plan rather than by a per-endpoint request cap. Parsing and extraction run as
+  asynchronous jobs, so large workloads are absorbed by the job queue and read
+  back by polling or webhook rather than by holding open synchronous requests.
+notes: >-
+  No explicit numeric API rate limits are documented as of the review date.
+  Concurrency ceilings are drawn from the pricing page and should be verified.
+  Assume standard 429 throttling with backoff on sustained bursts.
+sources:
+- https://www.tensorlake.ai/pricing
+- https://docs.tensorlake.ai/api-reference/introduction
+- https://docs.tensorlake.ai/platform/authentication
+responseCodes:
+  throttled: 429
+limits:
+- name: API Request Rate
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric request-rate limit is documented for the REST API.
+- name: Concurrent Sandboxes
+  scope: account
+  metric: sandboxes
+  limit: per plan (Free ~2, On-Demand ~100, Pro ~1,000)
+  notes: Concurrency ceiling is set by the subscription tier.
+- name: Document Page Allowance
+  scope: account
+  metric: pages
+  limit: per plan / credit balance
+  notes: Document ingestion is metered by the page against the plan's credit allowance.
+policies:
+- name: Asynchronous Jobs
+  description: Parse and extraction requests return a job id immediately; results are retrieved by polling GET /documents/v2/parse/{parse_id} or via webhook, smoothing bursty load.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,175 @@
+aid: tensorlake
+url: https://raw.githubusercontent.com/api-evangelist/tensorlake/refs/heads/main/apis.yml
+name: Tensorlake
+kind: company
+description: Tensorlake is a document ingestion and data extraction platform for AI
+  applications. Its Document Ingestion API parses PDFs, images, and other documents
+  into layout-aware Markdown and structured chunks (OCR, tables, figures, signatures),
+  performs schema-guided structured extraction and classification, and manages
+  reusable files and datasets. Work is submitted as asynchronous parse jobs over a
+  REST API and retrieved by polling or webhooks. Tensorlake Cloud also runs
+  serverless workflows and MicroVM sandboxes for agentic document pipelines.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Document Extraction
+- Data Extraction
+- Document Ingestion
+- Document Parsing
+- OCR
+- Data Ingestion
+- AI
+- Unstructured Data
+- Document AI
+- RAG
+created: '2026-07-12'
+modified: '2026-07-12'
+specificationVersion: '0.19'
+apis:
+- aid: tensorlake:tensorlake-document-parse-api
+  name: Tensorlake Document Parse API
+  tags:
+  - Document Parsing
+  - OCR
+  - Layout
+  - Chunking
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.tensorlake.ai/api-reference/parse/parse
+  baseURL: https://api.tensorlake.ai
+  properties:
+  - url: https://docs.tensorlake.ai/document-ingestion/parsing
+    type: Documentation
+  - url: https://docs.tensorlake.ai/api-reference/introduction
+    type: APIReference
+  - url: openapi/tensorlake-openapi.yml
+    type: OpenAPI
+  - url: collections/tensorlake.postman_collection.json
+    type: PostmanCollection
+  - url: collections/tensorlake.opencollection.json
+    type: OpenCollection
+  description: Submit a file, URL, or raw text/HTML for document parsing and retrieve
+    layout-aware Markdown, page fragments, tables, and figures. Parsing runs as an
+    asynchronous job - POST /documents/v2/parse returns a parse id, and results are
+    read back with GET /documents/v2/parse/{parse_id} (or via webhook). Jobs can be
+    listed and deleted.
+- aid: tensorlake:tensorlake-structured-extraction-api
+  name: Tensorlake Structured Extraction API
+  tags:
+  - Structured Extraction
+  - Classification
+  - Schema
+  - Document AI
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.tensorlake.ai/document-ingestion/parsing/structured-extraction
+  baseURL: https://api.tensorlake.ai
+  properties:
+  - url: https://docs.tensorlake.ai/document-ingestion/parsing/structured-extraction
+    type: Documentation
+  - url: https://docs.tensorlake.ai/api-reference/introduction
+    type: APIReference
+  - url: openapi/tensorlake-openapi.yml
+    type: OpenAPI
+  - url: collections/tensorlake.postman_collection.json
+    type: PostmanCollection
+  - url: collections/tensorlake.opencollection.json
+    type: OpenCollection
+  description: Extract structured JSON from documents guided by a JSON schema
+    (POST /documents/v2/extract), classify documents into categories
+    (POST /documents/v2/classify), read/OCR raw content (POST /documents/v2/read),
+    and apply edits (POST /documents/v2/edit). Turns unstructured documents into
+    schema-conformant data for RAG and agent pipelines.
+- aid: tensorlake:tensorlake-files-api
+  name: Tensorlake Files API
+  tags:
+  - Files
+  - Upload
+  - Storage
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.tensorlake.ai/api-reference/introduction
+  baseURL: https://api.tensorlake.ai
+  properties:
+  - url: https://docs.tensorlake.ai/api-reference/introduction
+    type: APIReference
+  - url: openapi/tensorlake-openapi.yml
+    type: OpenAPI
+  - url: collections/tensorlake.postman_collection.json
+    type: PostmanCollection
+  - url: collections/tensorlake.opencollection.json
+    type: OpenCollection
+  description: Upload and manage the files that parse and extraction jobs run against.
+    Upload a file (PUT /documents/v2/files), list files (GET /documents/v2/files),
+    read file metadata (GET /documents/v2/files/{file_id}/metadata), and delete a
+    file (DELETE /documents/v2/files/{file_id}). Uploaded files are referenced by id
+    in parse and extraction requests.
+- aid: tensorlake:tensorlake-datasets-api
+  name: Tensorlake Datasets API
+  tags:
+  - Datasets
+  - Batch
+  - Pipelines
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.tensorlake.ai/api-reference/introduction
+  baseURL: https://api.tensorlake.ai
+  properties:
+  - url: https://docs.tensorlake.ai/api-reference/introduction
+    type: APIReference
+  - url: openapi/tensorlake-openapi.yml
+    type: OpenAPI
+  - url: collections/tensorlake.postman_collection.json
+    type: PostmanCollection
+  - url: collections/tensorlake.opencollection.json
+    type: OpenCollection
+  description: Group documents into datasets that apply a consistent parse and
+    extraction configuration across many files. Create, list, get, update, and
+    delete datasets, submit files to a dataset for processing
+    (POST /documents/v2/datasets/{dataset_id}/parse), and read the accumulated
+    structured output (GET /documents/v2/datasets/{dataset_id}/data).
+- aid: tensorlake:tensorlake-sandboxes-api
+  name: Tensorlake Sandboxes API
+  tags:
+  - Sandboxes
+  - Serverless
+  - Orchestration
+  - Agents
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.tensorlake.ai/sandboxes/introduction
+  baseURL: https://api.tensorlake.ai
+  properties:
+  - url: https://docs.tensorlake.ai/sandboxes/introduction
+    type: Documentation
+  - url: https://docs.tensorlake.ai/api-reference/introduction
+    type: APIReference
+  - url: openapi/tensorlake-openapi.yml
+    type: OpenAPI
+  - url: collections/tensorlake.postman_collection.json
+    type: PostmanCollection
+  - url: collections/tensorlake.opencollection.json
+    type: OpenCollection
+  description: Provision and manage MicroVM sandboxes that run serverless workflows
+    and agent code alongside document ingestion. Create, list, get, update, and
+    delete sandboxes, and snapshot, suspend, or resume them
+    (POST /sandboxes/{sandbox_id}/snapshot | suspend | resume) for durable,
+    resumable execution.
+common:
+- type: DomainSecurity
+  url: security/tensorlake-domain-security.yml
+- type: Authentication
+  url: authentication/tensorlake-authentication.yml
+- type: GitHubOrganization
+  url: https://github.com/tensorlakeai
+- type: LinkedIn
+  url: https://www.linkedin.com/company/tensorlake
+- type: Website
+  url: https://www.tensorlake.ai
+- type: Documentation
+  url: https://docs.tensorlake.ai
+- type: Plans
+  url: plans/tensorlake-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/tensorlake-rate-limits.yml
+- type: FinOps
+  url: finops/tensorlake-finops.yml
+- url: https://www.tensorlake.ai/blog
+  type: Blog
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

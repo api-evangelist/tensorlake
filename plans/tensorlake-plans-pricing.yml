@@ -1,0 +1,131 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Tensorlake
+providerId: tensorlake
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Document Extraction
+- Document Ingestion
+- OCR
+- AI
+- Plans
+description: >-
+  Tensorlake Cloud bills on a credit / usage basis, where 1 credit is worth
+  $0.01. Document ingestion is priced by the page - published rates put document
+  parsing and extraction at roughly $10 per 1,000 pages ($0.01 per page).
+  Serverless workflows and MicroVM sandboxes are metered separately on compute
+  (CPU per hour, RAM per GB-hour, disk per GB-hour, snapshot storage per
+  GB-month), billed by the second. Tiers observed on the pricing page are Free,
+  On-Demand (pay-as-you-go), Pro ($250/month + usage), and Enterprise (custom,
+  in-VPC). Exact per-unit rates are not reconciled here - verify on the
+  Tensorlake pricing page.
+notes: >-
+  Document-ingestion per-page pricing and sandbox compute rates come from the
+  Tensorlake pricing page and third-party listings and may change. The
+  $10-per-1,000-pages figure and the four tiers below should be confirmed during
+  reconciliation.
+sources:
+- https://www.tensorlake.ai/pricing
+- https://docs.tensorlake.ai
+plans:
+- id: tensorlake-free
+  name: Free
+  type: free
+  description: >-
+    Free tier for evaluation, including a starter credit allowance and a small
+    number of concurrent sandboxes with bounded session time.
+  entries:
+  - label: Free Credits
+    name: free_credits
+    type: usage
+    metric: credits
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 up to the free-tier credit allowance
+    userMultiplied: false
+  elements:
+  - name: Document Ingestion API
+  - name: Up to 2 Concurrent Sandboxes
+  - name: Bounded Session Time
+- id: tensorlake-on-demand
+  name: On-Demand
+  type: usage
+  description: >-
+    Pay-as-you-go usage with no base fee, scaling concurrency on demand. Document
+    ingestion billed per page (credits); sandbox runtime billed per second on
+    compute meters.
+  entries:
+  - label: Document Pages
+    name: document_pages
+    type: usage
+    metric: pages
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000
+    price: approx. $10 per 1,000 pages (1 credit = $0.01 per page); verify
+    userMultiplied: false
+  - label: Sandbox Compute
+    name: sandbox_compute
+    type: usage
+    metric: compute
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: metered CPU/RAM/disk/snapshot, billed by the second; see pricing page
+    userMultiplied: false
+  elements:
+  - name: Document Ingestion API
+  - name: Serverless Workflows and Sandboxes
+  - name: Scales to 100 Concurrent Sandboxes
+- id: tensorlake-pro
+  name: Pro
+  type: paid
+  description: >-
+    Monthly subscription with higher concurrency and discounted On-Demand
+    compute rates, plus usage on top.
+  entries:
+  - label: Monthly Subscription
+    name: pro_subscription
+    type: flat
+    metric: subscription
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $250/month + usage
+    userMultiplied: false
+  elements:
+  - name: Up to 1,000 Concurrent Sandboxes
+  - name: Discounted Compute Rates
+  - name: Document Ingestion API
+- id: tensorlake-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom plan for high-volume usage with unlimited concurrency, in-VPC
+    deployment, security review, SLAs, and negotiated terms. Contact Tensorlake.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Unlimited Concurrency
+  - name: In-VPC Deployment
+  - name: SLAs and Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,105 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Tensorlake
+providerId: tensorlake
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Document Extraction
+- Document Ingestion
+- OCR
+- AI
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Tensorlake Cloud spend. Tensorlake bills on a credit model
+  where 1 credit equals $0.01. Document ingestion is metered primarily by the
+  page (published rates put parsing and extraction near $10 per 1,000 pages),
+  while serverless workflows and MicroVM sandboxes are metered on compute - CPU
+  per hour, RAM per GB-hour, disk per GB-hour, and snapshot storage per
+  GB-month - billed by the second. A Pro subscription ($250/month + usage) adds
+  discounted compute rates, and Enterprise agreements cover high-volume or
+  in-VPC deployments.
+notes: >-
+  Per-unit rates are not reconciled here. The $10-per-1,000-pages document rate
+  and the sandbox compute meters come from the Tensorlake pricing page and
+  third-party listings; verify current numbers during reconciliation.
+sources:
+- https://www.tensorlake.ai/pricing
+- https://docs.tensorlake.ai
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Tensorlake
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Tensorlake Cloud
+  ServiceCategory: AI and Machine Learning
+  ProviderName: Tensorlake
+  PublisherName: Tensorlake
+  InvoiceIssuerName: Tensorlake
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: document_pages
+  description: Pages of documents parsed / extracted through the Document Ingestion API, billed in credits (~$10 per 1,000 pages).
+  unit: pages
+  aggregation: sum
+  dimensions:
+  - project
+  - dataset
+- name: sandbox_cpu
+  description: CPU time consumed by MicroVM sandboxes, billed per hour and metered by the second.
+  unit: hours
+  aggregation: sum
+  dimensions:
+  - project
+  - sandbox
+- name: sandbox_memory
+  description: RAM consumed by sandboxes, billed per GB-hour.
+  unit: gb_hours
+  aggregation: sum
+  dimensions:
+  - project
+  - sandbox
+- name: sandbox_disk
+  description: Disk consumed by sandboxes, billed per GB-hour.
+  unit: gb_hours
+  aggregation: sum
+  dimensions:
+  - project
+  - sandbox
+- name: snapshot_storage
+  description: Sandbox snapshot storage, billed per GB-month.
+  unit: gb_months
+  aggregation: sum
+  dimensions:
+  - project
+principles:
+- name: Visibility
+  description: Track pages processed per project and dataset, and sandbox CPU/RAM/disk/snapshot usage per sandbox, to see where credits are spent.
+- name: Allocation
+  description: Name projects, datasets, and sandboxes per workload/team so page and compute spend map to internal cost centers.
+- name: Optimization
+  description: Scope page ranges and chunking to only the content you need; suspend idle sandboxes to pause compute billing; consolidate repeated document types into datasets with a shared configuration.
+- name: Accountability
+  description: Assign owners per project; review monthly page volume and sandbox compute against the plan's credit allowance or Pro subscription.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

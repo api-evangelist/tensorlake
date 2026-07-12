@@ -1,0 +1,19 @@
+generated: '2026-07-12'
+method: documented
+source: https://docs.tensorlake.ai/platform/authentication
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: >-
+    Tensorlake API key created in the Tensorlake Cloud dashboard
+    (cloud.tensorlake.ai) under a project. Keys are prefixed `tl_apiKey_` and are
+    passed on every REST request as `Authorization: Bearer <token>`. A live
+    unauthenticated request to https://api.tensorlake.ai returns HTTP 401,
+    confirming Bearer enforcement.
+  sources:
+  - https://docs.tensorlake.ai/platform/authentication
+  - https://docs.tensorlake.ai/api-reference/introduction

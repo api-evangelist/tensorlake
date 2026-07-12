@@ -1,0 +1,109 @@
+aid: tensorlake
+name: Tensorlake
+review:
+  question: Does Tensorlake expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-12'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Tensorlake's public API surface
+    (api.tensorlake.ai) is request/response REST over HTTPS. Document parsing
+    and extraction are asynchronous, but the async model is job-queue plus
+    client polling (submit a job, receive a parse id, GET the job until it is
+    complete) with optional webhooks for completion callbacks. There is no
+    server-push transport (WebSocket or SSE) on Tensorlake's own API to model.
+    Webhooks are server-to-endpoint HTTP callbacks, not a persistent socket.
+findings:
+  summary: |
+    Tensorlake does not publish a documented public WebSocket API. Tensorlake
+    Cloud exposes a REST API at https://api.tensorlake.ai, authenticated with an
+    API key passed as a Bearer token (keys are prefixed tl_apiKey_). The
+    Document Ingestion API parses documents, extracts structured data, and
+    manages files and datasets under /documents/v2/*; serverless workflows and
+    MicroVM sandboxes are managed under /sandboxes/*. Parsing and extraction run
+    as asynchronous jobs: a POST returns a parse id (job id), and the result is
+    read back with GET /documents/v2/parse/{parse_id} or delivered by webhook.
+    No realtime, bidirectional, or streaming WebSocket (ws:// or wss://)
+    endpoint is documented on Tensorlake's API as of the review date.
+  openSource: |
+    Tensorlake originated the open-source Indexify project
+    (github.com/tensorlakeai) for building document ingestion / data pipelines.
+    The commercial Tensorlake Cloud platform (Document Ingestion, serverless
+    workflows, and sandboxes) is a hosted API and is what this catalog entry
+    describes.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.tensorlake.ai
+      documented: true
+      note: Document Ingestion (parse, extract, classify, read, edit, files, datasets) and Sandboxes. Live unauthenticated request returns HTTP 401.
+    - protocol: Async Job Polling
+      scheme: https
+      documented: true
+      note: Parse/extract jobs return a parse id; results retrieved by polling GET /documents/v2/parse/{parse_id}. Client-initiated, not server push.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Optional webhook callbacks notify a configured HTTP endpoint when a job completes. Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in Tensorlake's API reference as of the review date.
+  endpointsConfirmedRest:
+    - POST   https://api.tensorlake.ai/documents/v2/parse
+    - GET    https://api.tensorlake.ai/documents/v2/parse
+    - GET    https://api.tensorlake.ai/documents/v2/parse/{parse_id}
+    - DELETE https://api.tensorlake.ai/documents/v2/parse/{parse_id}
+    - POST   https://api.tensorlake.ai/documents/v2/extract
+    - POST   https://api.tensorlake.ai/documents/v2/classify
+    - POST   https://api.tensorlake.ai/documents/v2/read
+    - POST   https://api.tensorlake.ai/documents/v2/edit
+    - PUT    https://api.tensorlake.ai/documents/v2/files
+    - GET    https://api.tensorlake.ai/documents/v2/files
+    - DELETE https://api.tensorlake.ai/documents/v2/files/{file_id}
+    - GET    https://api.tensorlake.ai/documents/v2/files/{file_id}/metadata
+    - POST   https://api.tensorlake.ai/documents/v2/datasets
+    - GET    https://api.tensorlake.ai/documents/v2/datasets
+    - GET    https://api.tensorlake.ai/documents/v2/datasets/{dataset_id}
+    - PUT    https://api.tensorlake.ai/documents/v2/datasets/{dataset_id}
+    - DELETE https://api.tensorlake.ai/documents/v2/datasets/{dataset_id}
+    - GET    https://api.tensorlake.ai/documents/v2/datasets/{dataset_id}/data
+    - POST   https://api.tensorlake.ai/documents/v2/datasets/{dataset_id}/parse
+    - POST   https://api.tensorlake.ai/sandboxes
+    - GET    https://api.tensorlake.ai/sandboxes
+    - GET    https://api.tensorlake.ai/sandboxes/{sandbox_id}
+    - PATCH  https://api.tensorlake.ai/sandboxes/{sandbox_id}
+    - DELETE https://api.tensorlake.ai/sandboxes/{sandbox_id}
+    - POST   https://api.tensorlake.ai/sandboxes/{sandbox_id}/snapshot
+    - POST   https://api.tensorlake.ai/sandboxes/{sandbox_id}/suspend
+    - POST   https://api.tensorlake.ai/sandboxes/{sandbox_id}/resume
+  endpointsModeled:
+    - note: All request and response BODY schemas in openapi/tensorlake-openapi.yml are modeled from Tensorlake documentation and SDK behavior. Paths, methods, base URL, and Bearer auth are confirmed against Tensorlake's published OpenAPI document; field-level schemas are illustrative and should be verified against the live spec.
+sources:
+  - url: https://docs.tensorlake.ai/api-reference/introduction
+    type: APIReference
+    note: API reference introduction; base URL and endpoint groups.
+  - url: https://docs.tensorlake.ai/api-reference/openapi.yaml
+    type: OpenAPI
+    note: Tensorlake's published OpenAPI 3.1.0 document; source of the confirmed path list and methods. Title "Tensorlake API", version 0.1.0, server https://api.tensorlake.ai/.
+  - url: https://docs.tensorlake.ai/platform/authentication
+    type: Documentation
+    note: API key (tl_apiKey_) passed as Authorization Bearer token.
+  - url: https://docs.tensorlake.ai/document-ingestion/parsing
+    type: Documentation
+    note: Document parsing flow and options (chunking, tables, OCR, structured extraction).
+  - url: https://docs.tensorlake.ai/webhooks/overview
+    type: Documentation
+    note: Webhook callbacks for job completion. HTTP callbacks, not WebSocket.
+  - url: https://www.tensorlake.ai/pricing
+    type: Documentation
+    note: Credit model (1 credit = $0.01), per-page document pricing, sandbox compute meters, Free/On-Demand/Pro/Enterprise tiers.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists on Tensorlake's public API. The API is
+    request/response REST plus an asynchronous job-polling model and optional
+    webhook callbacks - none of which is a server-push socket transport. No
+    AsyncAPI document was created and no asyncapi/ artifact was added.

@@ -1,0 +1,298 @@
+{
+  "info": {
+    "name": "Tensorlake API",
+    "description": "Tensorlake Cloud Document Ingestion, Datasets, and Sandboxes API. Base URL: https://api.tensorlake.ai. Authenticate with an API key (created at cloud.tensorlake.ai, prefixed tl_apiKey_) passed as a Bearer token. Document parsing and extraction run as asynchronous jobs: submit a job, then poll GET /documents/v2/parse/{parse_id} or receive a webhook. Path list and methods are grounded in Tensorlake's published OpenAPI document; request bodies are modeled and illustrative.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.tensorlake.ai", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Parse",
+      "item": [
+        {
+          "name": "Submit a document parse job",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"file_id\": \"\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"section\",\n    \"table_output_mode\": \"markdown\"\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/parse", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "parse"] },
+            "description": "Submit a file id, URL, or raw text/HTML for parsing. Returns a parse id. Modeled body."
+          }
+        },
+        {
+          "name": "List parse jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/parse", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "parse"] },
+            "description": "Lists parse jobs, most recent first."
+          }
+        },
+        {
+          "name": "Get a parse job and its result",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/parse/:parse_id", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "parse", ":parse_id"], "variable": [{ "key": "parse_id", "value": "" }] },
+            "description": "Retrieves a parse job by id, including parsed Markdown and structured output once complete."
+          }
+        },
+        {
+          "name": "Delete a parse job",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/parse/:parse_id", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "parse", ":parse_id"], "variable": [{ "key": "parse_id", "value": "" }] },
+            "description": "Deletes a parse job and its stored result."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Structured Extraction",
+      "item": [
+        {
+          "name": "Extract structured data",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"file_id\": \"\",\n  \"json_schema\": {\n    \"type\": \"object\",\n    \"properties\": {}\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/extract", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "extract"] },
+            "description": "Extracts structured JSON guided by a JSON schema. Modeled body."
+          }
+        },
+        {
+          "name": "Classify a document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"file_id\": \"\",\n  \"classes\": [\n    { \"name\": \"invoice\", \"description\": \"An invoice document\" }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/classify", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "classify"] },
+            "description": "Classifies a document into one of the supplied categories. Modeled body."
+          }
+        },
+        {
+          "name": "Read / OCR a document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"file_id\": \"\"\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/read", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "read"] },
+            "description": "Runs OCR / read on a document to return raw text per page. Modeled body."
+          }
+        },
+        {
+          "name": "Edit a document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"file_id\": \"\",\n  \"operations\": []\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/edit", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "edit"] },
+            "description": "Applies edits to a document. Modeled body."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "item": [
+        {
+          "name": "Upload a file",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [] }] },
+            "url": { "raw": "{{baseUrl}}/documents/v2/files", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "files"] },
+            "description": "Uploads a document and returns a file id. Modeled body."
+          }
+        },
+        {
+          "name": "List files",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/files", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "files"] },
+            "description": "Lists uploaded files in the current project."
+          }
+        },
+        {
+          "name": "Get file metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/files/:file_id/metadata", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "files", ":file_id", "metadata"], "variable": [{ "key": "file_id", "value": "" }] },
+            "description": "Retrieves metadata for a file."
+          }
+        },
+        {
+          "name": "Delete a file",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/files/:file_id", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "files", ":file_id"], "variable": [{ "key": "file_id", "value": "" }] },
+            "description": "Deletes an uploaded file by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Datasets",
+      "item": [
+        {
+          "name": "Create a dataset",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"invoices\",\n  \"parsing_options\": { \"chunking_strategy\": \"section\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets"] },
+            "description": "Creates a dataset with a shared parse / extraction configuration. Modeled body."
+          }
+        },
+        {
+          "name": "List datasets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets"] },
+            "description": "Lists datasets in the current project."
+          }
+        },
+        {
+          "name": "Get a dataset",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets/:dataset_id", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets", ":dataset_id"], "variable": [{ "key": "dataset_id", "value": "" }] },
+            "description": "Retrieves a dataset and its configuration."
+          }
+        },
+        {
+          "name": "Update a dataset",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets/:dataset_id", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets", ":dataset_id"], "variable": [{ "key": "dataset_id", "value": "" }] },
+            "description": "Updates a dataset's configuration. Modeled body."
+          }
+        },
+        {
+          "name": "Delete a dataset",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets/:dataset_id", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets", ":dataset_id"], "variable": [{ "key": "dataset_id", "value": "" }] },
+            "description": "Deletes a dataset."
+          }
+        },
+        {
+          "name": "Get dataset data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets/:dataset_id/data", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets", ":dataset_id", "data"], "variable": [{ "key": "dataset_id", "value": "" }] },
+            "description": "Retrieves accumulated parse / extraction output for a dataset."
+          }
+        },
+        {
+          "name": "Submit a file to a dataset",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"file_id\": \"\"\n}" },
+            "url": { "raw": "{{baseUrl}}/documents/v2/datasets/:dataset_id/parse", "host": ["{{baseUrl}}"], "path": ["documents", "v2", "datasets", ":dataset_id", "parse"], "variable": [{ "key": "dataset_id", "value": "" }] },
+            "description": "Submits a file to a dataset, parsing it with the dataset's shared configuration. Modeled body."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sandboxes",
+      "item": [
+        {
+          "name": "Create a sandbox",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"doc-workflow\"\n}" },
+            "url": { "raw": "{{baseUrl}}/sandboxes", "host": ["{{baseUrl}}"], "path": ["sandboxes"] },
+            "description": "Provisions a MicroVM sandbox. Modeled body."
+          }
+        },
+        {
+          "name": "List sandboxes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/sandboxes", "host": ["{{baseUrl}}"], "path": ["sandboxes"] },
+            "description": "Lists sandboxes in the current project."
+          }
+        },
+        {
+          "name": "Get a sandbox",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/sandboxes/:sandbox_id", "host": ["{{baseUrl}}"], "path": ["sandboxes", ":sandbox_id"], "variable": [{ "key": "sandbox_id", "value": "" }] },
+            "description": "Retrieves a sandbox by id."
+          }
+        },
+        {
+          "name": "Update a sandbox",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/sandboxes/:sandbox_id", "host": ["{{baseUrl}}"], "path": ["sandboxes", ":sandbox_id"], "variable": [{ "key": "sandbox_id", "value": "" }] },
+            "description": "Updates a sandbox. Modeled body."
+          }
+        },
+        {
+          "name": "Delete a sandbox",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/sandboxes/:sandbox_id", "host": ["{{baseUrl}}"], "path": ["sandboxes", ":sandbox_id"], "variable": [{ "key": "sandbox_id", "value": "" }] },
+            "description": "Deletes a sandbox."
+          }
+        },
+        {
+          "name": "Snapshot a sandbox",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/sandboxes/:sandbox_id/snapshot", "host": ["{{baseUrl}}"], "path": ["sandboxes", ":sandbox_id", "snapshot"], "variable": [{ "key": "sandbox_id", "value": "" }] },
+            "description": "Captures a point-in-time snapshot of a sandbox."
+          }
+        },
+        {
+          "name": "Suspend a sandbox",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/sandboxes/:sandbox_id/suspend", "host": ["{{baseUrl}}"], "path": ["sandboxes", ":sandbox_id", "suspend"], "variable": [{ "key": "sandbox_id", "value": "" }] },
+            "description": "Suspends a running sandbox."
+          }
+        },
+        {
+          "name": "Resume a sandbox",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/sandboxes/:sandbox_id/resume", "host": ["{{baseUrl}}"], "path": ["sandboxes", ":sandbox_id", "resume"], "variable": [{ "key": "sandbox_id", "value": "" }] },
+            "description": "Resumes a suspended sandbox."
+          }
+        }
+      ]
+    }
+  ]
+}

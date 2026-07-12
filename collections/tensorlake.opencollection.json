@@ -1,0 +1,297 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tensorlake API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Parse", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Submit a document parse job.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/parse",
+            "body": { "type": "json", "data": "{\n  \"file_id\": \"\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"section\",\n    \"table_output_mode\": \"markdown\"\n  }\n}" }
+          },
+          "docs": "Submit a file id, URL, or raw text/HTML for parsing. Returns a parse id. Modeled body."
+        },
+        {
+          "info": { "name": "List parse jobs.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.tensorlake.ai/documents/v2/parse" },
+          "docs": "Lists parse jobs, most recent first."
+        },
+        {
+          "info": { "name": "Get a parse job and its result.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/parse/:parse_id",
+            "params": [
+              { "name": "parse_id", "value": "", "type": "path", "description": "The id of the parse job." }
+            ]
+          },
+          "docs": "Retrieves a parse job by id, including parsed Markdown and structured output once complete."
+        },
+        {
+          "info": { "name": "Delete a parse job.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/documents/v2/parse/:parse_id",
+            "params": [
+              { "name": "parse_id", "value": "", "type": "path", "description": "The id of the parse job." }
+            ]
+          },
+          "docs": "Deletes a parse job and its stored result."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Structured Extraction", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Extract structured data.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/extract",
+            "body": { "type": "json", "data": "{\n  \"file_id\": \"\",\n  \"json_schema\": {\n    \"type\": \"object\",\n    \"properties\": {}\n  }\n}" }
+          },
+          "docs": "Extracts structured JSON guided by a JSON schema. Modeled body."
+        },
+        {
+          "info": { "name": "Classify a document.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/classify",
+            "body": { "type": "json", "data": "{\n  \"file_id\": \"\",\n  \"classes\": [\n    { \"name\": \"invoice\", \"description\": \"An invoice document\" }\n  ]\n}" }
+          },
+          "docs": "Classifies a document into one of the supplied categories. Modeled body."
+        },
+        {
+          "info": { "name": "Read / OCR a document.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/read",
+            "body": { "type": "json", "data": "{\n  \"file_id\": \"\"\n}" }
+          },
+          "docs": "Runs OCR / read on a document to return raw text per page. Modeled body."
+        },
+        {
+          "info": { "name": "Edit a document.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/edit",
+            "body": { "type": "json", "data": "{\n  \"file_id\": \"\",\n  \"operations\": []\n}" }
+          },
+          "docs": "Applies edits to a document. Modeled body."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Files", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Upload a file.", "type": "http" },
+          "http": { "method": "PUT", "url": "https://api.tensorlake.ai/documents/v2/files" },
+          "docs": "Uploads a document as multipart/form-data and returns a file id. Modeled body."
+        },
+        {
+          "info": { "name": "List files.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.tensorlake.ai/documents/v2/files" },
+          "docs": "Lists uploaded files in the current project."
+        },
+        {
+          "info": { "name": "Get file metadata.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/files/:file_id/metadata",
+            "params": [
+              { "name": "file_id", "value": "", "type": "path", "description": "The id of the uploaded file." }
+            ]
+          },
+          "docs": "Retrieves metadata for a file."
+        },
+        {
+          "info": { "name": "Delete a file.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/documents/v2/files/:file_id",
+            "params": [
+              { "name": "file_id", "value": "", "type": "path", "description": "The id of the uploaded file." }
+            ]
+          },
+          "docs": "Deletes an uploaded file by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Datasets", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a dataset.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets",
+            "body": { "type": "json", "data": "{\n  \"name\": \"invoices\",\n  \"parsing_options\": { \"chunking_strategy\": \"section\" }\n}" }
+          },
+          "docs": "Creates a dataset with a shared parse / extraction configuration. Modeled body."
+        },
+        {
+          "info": { "name": "List datasets.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.tensorlake.ai/documents/v2/datasets" },
+          "docs": "Lists datasets in the current project."
+        },
+        {
+          "info": { "name": "Get a dataset.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id",
+            "params": [
+              { "name": "dataset_id", "value": "", "type": "path", "description": "The id of the dataset." }
+            ]
+          },
+          "docs": "Retrieves a dataset and its configuration."
+        },
+        {
+          "info": { "name": "Update a dataset.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id",
+            "params": [
+              { "name": "dataset_id", "value": "", "type": "path", "description": "The id of the dataset." }
+            ],
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Updates a dataset's configuration. Modeled body."
+        },
+        {
+          "info": { "name": "Delete a dataset.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id",
+            "params": [
+              { "name": "dataset_id", "value": "", "type": "path", "description": "The id of the dataset." }
+            ]
+          },
+          "docs": "Deletes a dataset."
+        },
+        {
+          "info": { "name": "Get dataset data.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id/data",
+            "params": [
+              { "name": "dataset_id", "value": "", "type": "path", "description": "The id of the dataset." }
+            ]
+          },
+          "docs": "Retrieves accumulated parse / extraction output for a dataset."
+        },
+        {
+          "info": { "name": "Submit a file to a dataset.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id/parse",
+            "params": [
+              { "name": "dataset_id", "value": "", "type": "path", "description": "The id of the dataset." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"file_id\": \"\"\n}" }
+          },
+          "docs": "Submits a file to a dataset, parsing it with the dataset's shared configuration. Modeled body."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Sandboxes", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a sandbox.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes",
+            "body": { "type": "json", "data": "{\n  \"name\": \"doc-workflow\"\n}" }
+          },
+          "docs": "Provisions a MicroVM sandbox. Modeled body."
+        },
+        {
+          "info": { "name": "List sandboxes.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.tensorlake.ai/sandboxes" },
+          "docs": "Lists sandboxes in the current project."
+        },
+        {
+          "info": { "name": "Get a sandbox.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id",
+            "params": [
+              { "name": "sandbox_id", "value": "", "type": "path", "description": "The id of the sandbox." }
+            ]
+          },
+          "docs": "Retrieves a sandbox by id."
+        },
+        {
+          "info": { "name": "Update a sandbox.", "type": "http" },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id",
+            "params": [
+              { "name": "sandbox_id", "value": "", "type": "path", "description": "The id of the sandbox." }
+            ],
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Updates a sandbox. Modeled body."
+        },
+        {
+          "info": { "name": "Delete a sandbox.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id",
+            "params": [
+              { "name": "sandbox_id", "value": "", "type": "path", "description": "The id of the sandbox." }
+            ]
+          },
+          "docs": "Deletes a sandbox."
+        },
+        {
+          "info": { "name": "Snapshot a sandbox.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id/snapshot",
+            "params": [
+              { "name": "sandbox_id", "value": "", "type": "path", "description": "The id of the sandbox." }
+            ]
+          },
+          "docs": "Captures a point-in-time snapshot of a sandbox."
+        },
+        {
+          "info": { "name": "Suspend a sandbox.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id/suspend",
+            "params": [
+              { "name": "sandbox_id", "value": "", "type": "path", "description": "The id of the sandbox." }
+            ]
+          },
+          "docs": "Suspends a running sandbox."
+        },
+        {
+          "info": { "name": "Resume a sandbox.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id/resume",
+            "params": [
+              { "name": "sandbox_id", "value": "", "type": "path", "description": "The id of the sandbox." }
+            ]
+          },
+          "docs": "Resumes a suspended sandbox."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
