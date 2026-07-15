@@ -150,6 +150,8 @@ apis:
     (POST /sandboxes/{sandbox_id}/snapshot | suspend | resume) for durable,
     resumable execution.
 common:
+- type: AgenticAccess
+  url: agentic-access/tensorlake-agentic-access.yml
 - type: DomainSecurity
   url: security/tensorlake-domain-security.yml
 - type: Authentication
