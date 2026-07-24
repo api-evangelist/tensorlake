@@ -1,0 +1,283 @@
+openapi: 3.1.0
+info:
+  title: Tensorlake Datasets Parse API
+  description: 'Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes. The Document Ingestion API parses documents (PDF, images, office formats) into layout-aware Markdown and structured chunks, performs schema-guided structured extraction and classification, and manages reusable files and datasets. Parsing runs as an asynchronous job: a parse request returns a parse id (job id) that is polled for results or delivered via webhook. All requests are authenticated with an API key passed as a Bearer token (Authorization: Bearer tl_apiKey_...).
+
+    GROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods, base URL, and Bearer auth are grounded in Tensorlake''s published OpenAPI document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference. Request and response BODY SCHEMAS below are MODELED from Tensorlake documentation and SDK behavior and are illustrative, not byte-exact - verify field names against the live specification before generating client code.'
+  version: 0.1.0
+  contact:
+    name: Tensorlake
+    url: https://www.tensorlake.ai
+servers:
+- url: https://api.tensorlake.ai
+  description: Tensorlake Cloud
+security:
+- bearerAuth: []
+tags:
+- name: Parse
+  description: Asynchronous document parsing jobs.
+paths:
+  /documents/v2/parse:
+    post:
+      operationId: post_parse
+      tags:
+      - Parse
+      summary: Submit a document parse job
+      description: Submit a file (by file id), a public URL, or raw text/HTML for parsing. Returns a parse id (job id) immediately; the job runs asynchronously. Options include chunking strategy, table parsing/output mode, OCR, and an optional structured extraction schema. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParseRequest'
+      responses:
+        '200':
+          description: The parse job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: list_parse
+      tags:
+      - Parse
+      summary: List parse jobs
+      description: Lists parse jobs in the current project, most recent first.
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of parse jobs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ParseJob'
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /documents/v2/parse/{parse_id}:
+    parameters:
+    - $ref: '#/components/parameters/ParseId'
+    get:
+      operationId: get_parse
+      tags:
+      - Parse
+      summary: Get a parse job and its result
+      description: Retrieves a parse job by id. While the job is pending the status reflects progress; once completed the response carries the parsed Markdown, chunks, page fragments, and any structured extraction output.
+      responses:
+        '200':
+          description: The parse job.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJob'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: delete_parse
+      tags:
+      - Parse
+      summary: Delete a parse job
+      description: Deletes a parse job and its stored result.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+    ParseId:
+      name: parse_id
+      in: path
+      required: true
+      description: The id of the parse job.
+      schema:
+        type: string
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Pagination cursor returned by a previous list call.
+      schema:
+        type: string
+  schemas:
+    ParseJob:
+      type: object
+      description: A parse job and, once complete, its result. MODELED.
+      properties:
+        parse_id:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - successful
+          - failure
+        created_at:
+          type: string
+          format: date-time
+        markdown:
+          type: string
+          description: Layout-aware Markdown rendering of the document.
+        chunks:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        pages:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        structured_data:
+          type: object
+          additionalProperties: true
+    ParseRequest:
+      type: object
+      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
+      properties:
+        file_id:
+          type: string
+          description: Id of a previously uploaded file.
+        file_url:
+          type: string
+          format: uri
+          description: Public URL of a document to fetch and parse.
+        raw_text:
+          type: string
+          description: Raw text or HTML to parse instead of a file.
+        page_range:
+          type: string
+          description: Pages to parse, e.g. "1-5,8".
+        parsing_options:
+          $ref: '#/components/schemas/ParsingOptions'
+        structured_extraction_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructuredExtractionOptions'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    StructuredExtractionOptions:
+      type: object
+      description: MODELED structured extraction configuration.
+      properties:
+        schema_name:
+          type: string
+        json_schema:
+          type: object
+          additionalProperties: true
+          description: A JSON Schema object describing the fields to extract.
+    ParseJobCreated:
+      type: object
+      description: Response returned when an async job is accepted. MODELED.
+      properties:
+        parse_id:
+          type: string
+          description: Identifier used to retrieve the job result.
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - successful
+          - failure
+    ParsingOptions:
+      type: object
+      description: MODELED parsing configuration.
+      properties:
+        chunking_strategy:
+          type: string
+          enum:
+          - none
+          - page
+          - section
+          - fragment
+          description: How the parsed output is split into chunks.
+        table_parsing_strategy:
+          type: string
+          description: Strategy used to detect and parse tables.
+        table_output_mode:
+          type: string
+          enum:
+          - markdown
+          - html
+          - json
+          description: Serialization format for detected tables.
+        signature_detection:
+          type: boolean
+        figure_detection:
+          type: boolean
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+  responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: apiKey
+      description: 'Tensorlake API key created in the Tensorlake Cloud dashboard (cloud.tensorlake.ai). Keys are prefixed tl_apiKey_ and are passed as Authorization: Bearer <token>.'

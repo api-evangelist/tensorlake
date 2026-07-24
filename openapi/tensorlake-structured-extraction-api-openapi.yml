@@ -1,0 +1,218 @@
+openapi: 3.1.0
+info:
+  title: Tensorlake Datasets Structured Extraction API
+  description: 'Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes. The Document Ingestion API parses documents (PDF, images, office formats) into layout-aware Markdown and structured chunks, performs schema-guided structured extraction and classification, and manages reusable files and datasets. Parsing runs as an asynchronous job: a parse request returns a parse id (job id) that is polled for results or delivered via webhook. All requests are authenticated with an API key passed as a Bearer token (Authorization: Bearer tl_apiKey_...).
+
+    GROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods, base URL, and Bearer auth are grounded in Tensorlake''s published OpenAPI document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference. Request and response BODY SCHEMAS below are MODELED from Tensorlake documentation and SDK behavior and are illustrative, not byte-exact - verify field names against the live specification before generating client code.'
+  version: 0.1.0
+  contact:
+    name: Tensorlake
+    url: https://www.tensorlake.ai
+servers:
+- url: https://api.tensorlake.ai
+  description: Tensorlake Cloud
+security:
+- bearerAuth: []
+tags:
+- name: Structured Extraction
+  description: Schema-guided extraction, classification, read/OCR, and edit.
+paths:
+  /documents/v2/extract:
+    post:
+      operationId: post_extract
+      tags:
+      - Structured Extraction
+      summary: Extract structured data from a document
+      description: Extracts structured JSON from a document guided by a JSON schema. Accepts a file id (or URL) plus a json_schema object describing the fields to pull. Runs asynchronously and returns a job id. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractRequest'
+      responses:
+        '200':
+          description: The extraction job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/classify:
+    post:
+      operationId: post_classify
+      tags:
+      - Structured Extraction
+      summary: Classify a document
+      description: Classifies a document into one of a supplied set of categories (for example invoice, contract, receipt). MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassifyRequest'
+      responses:
+        '200':
+          description: The classification job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/read:
+    post:
+      operationId: post_read
+      tags:
+      - Structured Extraction
+      summary: Read / OCR a document
+      description: Runs OCR / read on a document to return raw text content per page. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadRequest'
+      responses:
+        '200':
+          description: The read job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/edit:
+    post:
+      operationId: post_edit
+      tags:
+      - Structured Extraction
+      summary: Edit a document
+      description: Applies edits to a document (for example redaction or page operations). MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRequest'
+      responses:
+        '200':
+          description: The edit job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    EditRequest:
+      type: object
+      description: MODELED edit request.
+      properties:
+        file_id:
+          type: string
+        operations:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ReadRequest:
+      type: object
+      description: MODELED read / OCR request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        page_range:
+          type: string
+    ExtractRequest:
+      type: object
+      description: MODELED structured extraction request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        json_schema:
+          type: object
+          additionalProperties: true
+        page_range:
+          type: string
+    ParseJobCreated:
+      type: object
+      description: Response returned when an async job is accepted. MODELED.
+      properties:
+        parse_id:
+          type: string
+          description: Identifier used to retrieve the job result.
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - successful
+          - failure
+    ClassifyRequest:
+      type: object
+      description: MODELED classification request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        classes:
+          type: array
+          description: Candidate categories to classify the document into.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: apiKey
+      description: 'Tensorlake API key created in the Tensorlake Cloud dashboard (cloud.tensorlake.ai). Keys are prefixed tl_apiKey_ and are passed as Authorization: Bearer <token>.'

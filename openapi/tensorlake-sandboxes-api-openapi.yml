@@ -1,0 +1,261 @@
+openapi: 3.1.0
+info:
+  title: Tensorlake Datasets Sandboxes API
+  description: 'Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes. The Document Ingestion API parses documents (PDF, images, office formats) into layout-aware Markdown and structured chunks, performs schema-guided structured extraction and classification, and manages reusable files and datasets. Parsing runs as an asynchronous job: a parse request returns a parse id (job id) that is polled for results or delivered via webhook. All requests are authenticated with an API key passed as a Bearer token (Authorization: Bearer tl_apiKey_...).
+
+    GROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods, base URL, and Bearer auth are grounded in Tensorlake''s published OpenAPI document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference. Request and response BODY SCHEMAS below are MODELED from Tensorlake documentation and SDK behavior and are illustrative, not byte-exact - verify field names against the live specification before generating client code.'
+  version: 0.1.0
+  contact:
+    name: Tensorlake
+    url: https://www.tensorlake.ai
+servers:
+- url: https://api.tensorlake.ai
+  description: Tensorlake Cloud
+security:
+- bearerAuth: []
+tags:
+- name: Sandboxes
+  description: MicroVM sandboxes for serverless workflows and agent code.
+paths:
+  /sandboxes:
+    post:
+      operationId: create_sandbox
+      tags:
+      - Sandboxes
+      summary: Create a sandbox
+      description: Provisions a MicroVM sandbox for serverless workflows. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxInput'
+      responses:
+        '200':
+          description: The created sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: list_sandboxes
+      tags:
+      - Sandboxes
+      summary: List sandboxes
+      description: Lists sandboxes in the current project.
+      responses:
+        '200':
+          description: A page of sandboxes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /sandboxes/{sandbox_id}:
+    parameters:
+    - $ref: '#/components/parameters/SandboxId'
+    get:
+      operationId: get_sandbox
+      tags:
+      - Sandboxes
+      summary: Get a sandbox
+      description: Retrieves a sandbox by id.
+      responses:
+        '200':
+          description: The requested sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: update_sandbox
+      tags:
+      - Sandboxes
+      summary: Update a sandbox
+      description: Updates a sandbox. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxInput'
+      responses:
+        '200':
+          description: The updated sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: delete_sandbox
+      tags:
+      - Sandboxes
+      summary: Delete a sandbox
+      description: Deletes a sandbox.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /sandboxes/{sandbox_id}/snapshot:
+    parameters:
+    - $ref: '#/components/parameters/SandboxId'
+    post:
+      operationId: snapshot_sandbox
+      tags:
+      - Sandboxes
+      summary: Snapshot a sandbox
+      description: Captures a point-in-time snapshot of a sandbox for later restore.
+      responses:
+        '200':
+          description: The snapshot result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /sandboxes/{sandbox_id}/suspend:
+    parameters:
+    - $ref: '#/components/parameters/SandboxId'
+    post:
+      operationId: suspend_sandbox
+      tags:
+      - Sandboxes
+      summary: Suspend a sandbox
+      description: Suspends a running sandbox, pausing billing for compute.
+      responses:
+        '200':
+          description: The suspended sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /sandboxes/{sandbox_id}/resume:
+    parameters:
+    - $ref: '#/components/parameters/SandboxId'
+    post:
+      operationId: resume_sandbox
+      tags:
+      - Sandboxes
+      summary: Resume a sandbox
+      description: Resumes a suspended sandbox.
+      responses:
+        '200':
+          description: The resumed sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    SandboxInput:
+      type: object
+      description: MODELED sandbox configuration.
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          description: Base image for the MicroVM sandbox.
+        cpu:
+          type: number
+        memory_mb:
+          type: integer
+        disk_gb:
+          type: integer
+    Sandbox:
+      allOf:
+      - $ref: '#/components/schemas/SandboxInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+            enum:
+            - running
+            - suspended
+            - stopped
+          created_at:
+            type: string
+            format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+  parameters:
+    SandboxId:
+      name: sandbox_id
+      in: path
+      required: true
+      description: The id of the sandbox.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: apiKey
+      description: 'Tensorlake API key created in the Tensorlake Cloud dashboard (cloud.tensorlake.ai). Keys are prefixed tl_apiKey_ and are passed as Authorization: Bearer <token>.'
