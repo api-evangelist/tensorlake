@@ -1,0 +1,22 @@
+{
+  "provider": "tensorlake",
+  "sources": [
+    "tensorlake-datasets-api-openapi.yml",
+    "tensorlake-files-api-openapi.yml",
+    "tensorlake-parse-api-openapi.yml",
+    "tensorlake-sandboxes-api-openapi.yml",
+    "tensorlake-structured-extraction-api-openapi.yml"
+  ],
+  "outputs": [
+    "tensorlake-datasets-api-openapi.yml",
+    "tensorlake-files-api-openapi.yml",
+    "tensorlake-parse-api-openapi.yml",
+    "tensorlake-sandboxes-api-openapi.yml",
+    "tensorlake-structured-extraction-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

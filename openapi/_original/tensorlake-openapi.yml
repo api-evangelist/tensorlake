@@ -1,0 +1,1002 @@
+openapi: 3.1.0
+info:
+  title: Tensorlake API
+  description: >-
+    Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and
+    Sandboxes. The Document Ingestion API parses documents (PDF, images, office
+    formats) into layout-aware Markdown and structured chunks, performs
+    schema-guided structured extraction and classification, and manages reusable
+    files and datasets. Parsing runs as an asynchronous job: a parse request
+    returns a parse id (job id) that is polled for results or delivered via
+    webhook. All requests are authenticated with an API key passed as a Bearer
+    token (Authorization: Bearer tl_apiKey_...).
+
+    GROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods,
+    base URL, and Bearer auth are grounded in Tensorlake's published OpenAPI
+    document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference.
+    Request and response BODY SCHEMAS below are MODELED from Tensorlake
+    documentation and SDK behavior and are illustrative, not byte-exact - verify
+    field names against the live specification before generating client code.
+  version: 0.1.0
+  contact:
+    name: Tensorlake
+    url: https://www.tensorlake.ai
+servers:
+  - url: https://api.tensorlake.ai
+    description: Tensorlake Cloud
+security:
+  - bearerAuth: []
+tags:
+  - name: Parse
+    description: Asynchronous document parsing jobs.
+  - name: Structured Extraction
+    description: Schema-guided extraction, classification, read/OCR, and edit.
+  - name: Files
+    description: Upload and manage files referenced by parse and extraction jobs.
+  - name: Datasets
+    description: Group documents under a shared parse/extraction configuration.
+  - name: Sandboxes
+    description: MicroVM sandboxes for serverless workflows and agent code.
+paths:
+  /documents/v2/parse:
+    post:
+      operationId: post_parse
+      tags:
+        - Parse
+      summary: Submit a document parse job
+      description: >-
+        Submit a file (by file id), a public URL, or raw text/HTML for parsing.
+        Returns a parse id (job id) immediately; the job runs asynchronously.
+        Options include chunking strategy, table parsing/output mode, OCR, and
+        an optional structured extraction schema. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParseRequest'
+      responses:
+        '200':
+          description: The parse job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: list_parse
+      tags:
+        - Parse
+      summary: List parse jobs
+      description: Lists parse jobs in the current project, most recent first.
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of parse jobs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ParseJob'
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /documents/v2/parse/{parse_id}:
+    parameters:
+      - $ref: '#/components/parameters/ParseId'
+    get:
+      operationId: get_parse
+      tags:
+        - Parse
+      summary: Get a parse job and its result
+      description: >-
+        Retrieves a parse job by id. While the job is pending the status
+        reflects progress; once completed the response carries the parsed
+        Markdown, chunks, page fragments, and any structured extraction output.
+      responses:
+        '200':
+          description: The parse job.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJob'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: delete_parse
+      tags:
+        - Parse
+      summary: Delete a parse job
+      description: Deletes a parse job and its stored result.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /documents/v2/extract:
+    post:
+      operationId: post_extract
+      tags:
+        - Structured Extraction
+      summary: Extract structured data from a document
+      description: >-
+        Extracts structured JSON from a document guided by a JSON schema. Accepts
+        a file id (or URL) plus a json_schema object describing the fields to
+        pull. Runs asynchronously and returns a job id. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtractRequest'
+      responses:
+        '200':
+          description: The extraction job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/classify:
+    post:
+      operationId: post_classify
+      tags:
+        - Structured Extraction
+      summary: Classify a document
+      description: >-
+        Classifies a document into one of a supplied set of categories (for
+        example invoice, contract, receipt). MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassifyRequest'
+      responses:
+        '200':
+          description: The classification job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/read:
+    post:
+      operationId: post_read
+      tags:
+        - Structured Extraction
+      summary: Read / OCR a document
+      description: >-
+        Runs OCR / read on a document to return raw text content per page.
+        MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadRequest'
+      responses:
+        '200':
+          description: The read job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/edit:
+    post:
+      operationId: post_edit
+      tags:
+        - Structured Extraction
+      summary: Edit a document
+      description: >-
+        Applies edits to a document (for example redaction or page operations).
+        MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRequest'
+      responses:
+        '200':
+          description: The edit job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /documents/v2/files:
+    put:
+      operationId: put_file_v2
+      tags:
+        - Files
+      summary: Upload a file
+      description: >-
+        Uploads a document as multipart/form-data and returns a file id used in
+        subsequent parse and extraction requests. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: The uploaded file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: list_files_v2
+      tags:
+        - Files
+      summary: List files
+      description: Lists uploaded files in the current project.
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of files.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileObject'
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /documents/v2/files/{file_id}:
+    parameters:
+      - $ref: '#/components/parameters/FileId'
+    delete:
+      operationId: delete_file_v2
+      tags:
+        - Files
+      summary: Delete a file
+      description: Deletes an uploaded file by id.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /documents/v2/files/{file_id}/metadata:
+    parameters:
+      - $ref: '#/components/parameters/FileId'
+    get:
+      operationId: get_file_metadata_v2
+      tags:
+        - Files
+      summary: Get file metadata
+      description: Retrieves metadata (name, size, mime type, page count) for a file.
+      responses:
+        '200':
+          description: The file metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /documents/v2/datasets:
+    post:
+      operationId: create_dataset_v2
+      tags:
+        - Datasets
+      summary: Create a dataset
+      description: >-
+        Creates a dataset that applies a shared parse / extraction configuration
+        across the files submitted to it. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetInput'
+      responses:
+        '200':
+          description: The created dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    get:
+      operationId: list_datasets_v2
+      tags:
+        - Datasets
+      summary: List datasets
+      description: Lists datasets in the current project.
+      responses:
+        '200':
+          description: A page of datasets.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Dataset'
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /documents/v2/datasets/{dataset_id}:
+    parameters:
+      - $ref: '#/components/parameters/DatasetId'
+    get:
+      operationId: get_dataset_v2
+      tags:
+        - Datasets
+      summary: Get a dataset
+      description: Retrieves a dataset and its configuration by id.
+      responses:
+        '200':
+          description: The requested dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: update_dataset_v2
+      tags:
+        - Datasets
+      summary: Update a dataset
+      description: Updates a dataset's parse / extraction configuration. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetInput'
+      responses:
+        '200':
+          description: The updated dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: delete_dataset_v2
+      tags:
+        - Datasets
+      summary: Delete a dataset
+      description: Deletes a dataset.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /documents/v2/datasets/{dataset_id}/data:
+    parameters:
+      - $ref: '#/components/parameters/DatasetId'
+    get:
+      operationId: get_dataset_data_v2
+      tags:
+        - Datasets
+      summary: Get dataset data
+      description: >-
+        Retrieves the accumulated parse and structured extraction output for all
+        documents processed under a dataset.
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of dataset rows.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                  next_cursor:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /documents/v2/datasets/{dataset_id}/parse:
+    parameters:
+      - $ref: '#/components/parameters/DatasetId'
+    post:
+      operationId: parse_dataset_file_v2
+      tags:
+        - Datasets
+      summary: Submit a file to a dataset
+      description: >-
+        Submits a file to a dataset, parsing / extracting it with the dataset's
+        shared configuration. Returns a parse id. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetParseRequest'
+      responses:
+        '200':
+          description: The parse job was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseJobCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /sandboxes:
+    post:
+      operationId: create_sandbox
+      tags:
+        - Sandboxes
+      summary: Create a sandbox
+      description: Provisions a MicroVM sandbox for serverless workflows. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxInput'
+      responses:
+        '200':
+          description: The created sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: list_sandboxes
+      tags:
+        - Sandboxes
+      summary: List sandboxes
+      description: Lists sandboxes in the current project.
+      responses:
+        '200':
+          description: A page of sandboxes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /sandboxes/{sandbox_id}:
+    parameters:
+      - $ref: '#/components/parameters/SandboxId'
+    get:
+      operationId: get_sandbox
+      tags:
+        - Sandboxes
+      summary: Get a sandbox
+      description: Retrieves a sandbox by id.
+      responses:
+        '200':
+          description: The requested sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: update_sandbox
+      tags:
+        - Sandboxes
+      summary: Update a sandbox
+      description: Updates a sandbox. MODELED request body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SandboxInput'
+      responses:
+        '200':
+          description: The updated sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: delete_sandbox
+      tags:
+        - Sandboxes
+      summary: Delete a sandbox
+      description: Deletes a sandbox.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /sandboxes/{sandbox_id}/snapshot:
+    parameters:
+      - $ref: '#/components/parameters/SandboxId'
+    post:
+      operationId: snapshot_sandbox
+      tags:
+        - Sandboxes
+      summary: Snapshot a sandbox
+      description: Captures a point-in-time snapshot of a sandbox for later restore.
+      responses:
+        '200':
+          description: The snapshot result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /sandboxes/{sandbox_id}/suspend:
+    parameters:
+      - $ref: '#/components/parameters/SandboxId'
+    post:
+      operationId: suspend_sandbox
+      tags:
+        - Sandboxes
+      summary: Suspend a sandbox
+      description: Suspends a running sandbox, pausing billing for compute.
+      responses:
+        '200':
+          description: The suspended sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /sandboxes/{sandbox_id}/resume:
+    parameters:
+      - $ref: '#/components/parameters/SandboxId'
+    post:
+      operationId: resume_sandbox
+      tags:
+        - Sandboxes
+      summary: Resume a sandbox
+      description: Resumes a suspended sandbox.
+      responses:
+        '200':
+          description: The resumed sandbox.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sandbox'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: apiKey
+      description: >-
+        Tensorlake API key created in the Tensorlake Cloud dashboard
+        (cloud.tensorlake.ai). Keys are prefixed tl_apiKey_ and are passed as
+        Authorization: Bearer <token>.
+  parameters:
+    ParseId:
+      name: parse_id
+      in: path
+      required: true
+      description: The id of the parse job.
+      schema:
+        type: string
+    FileId:
+      name: file_id
+      in: path
+      required: true
+      description: The id of the uploaded file.
+      schema:
+        type: string
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: The id of the dataset.
+      schema:
+        type: string
+    SandboxId:
+      name: sandbox_id
+      in: path
+      required: true
+      description: The id of the sandbox.
+      schema:
+        type: string
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Pagination cursor returned by a previous list call.
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    ParseJobCreated:
+      type: object
+      description: Response returned when an async job is accepted. MODELED.
+      properties:
+        parse_id:
+          type: string
+          description: Identifier used to retrieve the job result.
+        status:
+          type: string
+          enum:
+            - pending
+            - processing
+            - successful
+            - failure
+    ParseRequest:
+      type: object
+      description: >-
+        Parse request. Supply exactly one document source (file_id, file_url, or
+        raw_text). MODELED - field names are illustrative.
+      properties:
+        file_id:
+          type: string
+          description: Id of a previously uploaded file.
+        file_url:
+          type: string
+          format: uri
+          description: Public URL of a document to fetch and parse.
+        raw_text:
+          type: string
+          description: Raw text or HTML to parse instead of a file.
+        page_range:
+          type: string
+          description: Pages to parse, e.g. "1-5,8".
+        parsing_options:
+          $ref: '#/components/schemas/ParsingOptions'
+        structured_extraction_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructuredExtractionOptions'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+    ParsingOptions:
+      type: object
+      description: MODELED parsing configuration.
+      properties:
+        chunking_strategy:
+          type: string
+          enum:
+            - none
+            - page
+            - section
+            - fragment
+          description: How the parsed output is split into chunks.
+        table_parsing_strategy:
+          type: string
+          description: Strategy used to detect and parse tables.
+        table_output_mode:
+          type: string
+          enum:
+            - markdown
+            - html
+            - json
+          description: Serialization format for detected tables.
+        signature_detection:
+          type: boolean
+        figure_detection:
+          type: boolean
+    StructuredExtractionOptions:
+      type: object
+      description: MODELED structured extraction configuration.
+      properties:
+        schema_name:
+          type: string
+        json_schema:
+          type: object
+          additionalProperties: true
+          description: A JSON Schema object describing the fields to extract.
+    ExtractRequest:
+      type: object
+      description: MODELED structured extraction request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        json_schema:
+          type: object
+          additionalProperties: true
+        page_range:
+          type: string
+    ClassifyRequest:
+      type: object
+      description: MODELED classification request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        classes:
+          type: array
+          description: Candidate categories to classify the document into.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+    ReadRequest:
+      type: object
+      description: MODELED read / OCR request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        page_range:
+          type: string
+    EditRequest:
+      type: object
+      description: MODELED edit request.
+      properties:
+        file_id:
+          type: string
+        operations:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ParseJob:
+      type: object
+      description: A parse job and, once complete, its result. MODELED.
+      properties:
+        parse_id:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - processing
+            - successful
+            - failure
+        created_at:
+          type: string
+          format: date-time
+        markdown:
+          type: string
+          description: Layout-aware Markdown rendering of the document.
+        chunks:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        pages:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        structured_data:
+          type: object
+          additionalProperties: true
+    FileObject:
+      type: object
+      description: MODELED file object.
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        mime_type:
+          type: string
+        size_bytes:
+          type: integer
+        page_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+    DatasetInput:
+      type: object
+      description: MODELED dataset configuration.
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        parsing_options:
+          $ref: '#/components/schemas/ParsingOptions'
+        structured_extraction_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructuredExtractionOptions'
+    Dataset:
+      allOf:
+        - $ref: '#/components/schemas/DatasetInput'
+        - type: object
+          properties:
+            id:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+    DatasetParseRequest:
+      type: object
+      description: MODELED request to submit a file to a dataset.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+    SandboxInput:
+      type: object
+      description: MODELED sandbox configuration.
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          description: Base image for the MicroVM sandbox.
+        cpu:
+          type: number
+        memory_mb:
+          type: integer
+        disk_gb:
+          type: integer
+    Sandbox:
+      allOf:
+        - $ref: '#/components/schemas/SandboxInput'
+        - type: object
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+              enum:
+                - running
+                - suspended
+                - stopped
+            created_at:
+              type: string
+              format: date-time
