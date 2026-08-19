@@ -1,0 +1,165 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tensorlake Datasets API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets"
+          },
+          "docs": "Lists datasets in the current project."
+        },
+        {
+          "info": {
+            "name": "Create a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a dataset that applies a shared parse / extraction configuration across the files submitted to it. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Get a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the dataset."
+              }
+            ]
+          },
+          "docs": "Retrieves a dataset and its configuration by id."
+        },
+        {
+          "info": {
+            "name": "Update a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the dataset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a dataset's parse / extraction configuration. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Delete a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the dataset."
+              }
+            ]
+          },
+          "docs": "Deletes a dataset."
+        },
+        {
+          "info": {
+            "name": "Get dataset data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id/data",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the dataset."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor returned by a previous list call."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the accumulated parse and structured extraction output for all documents processed under a dataset."
+        },
+        {
+          "info": {
+            "name": "Submit a file to a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/datasets/:dataset_id/parse",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the dataset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits a file to a dataset, parsing / extracting it with the dataset's shared configuration. Returns a parse id. MODELED request body."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

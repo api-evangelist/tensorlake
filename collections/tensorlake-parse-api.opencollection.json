@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tensorlake Datasets Parse API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Parse",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List parse jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/parse",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor returned by a previous list call."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return."
+              }
+            ]
+          },
+          "docs": "Lists parse jobs in the current project, most recent first."
+        },
+        {
+          "info": {
+            "name": "Submit a document parse job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/parse",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a file (by file id), a public URL, or raw text/HTML for parsing. Returns a parse id (job id) immediately; the job runs asynchronously. Options include chunking strategy, table parsing/output mode, OCR, and an optional structured extraction schema. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Get a parse job and its result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/parse/:parse_id",
+            "params": [
+              {
+                "name": "parse_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the parse job."
+              }
+            ]
+          },
+          "docs": "Retrieves a parse job by id. While the job is pending the status reflects progress; once completed the response carries the parsed Markdown, chunks, page fragments, and any structured extraction output."
+        },
+        {
+          "info": {
+            "name": "Delete a parse job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/documents/v2/parse/:parse_id",
+            "params": [
+              {
+                "name": "parse_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the parse job."
+              }
+            ]
+          },
+          "docs": "Deletes a parse job and its stored result."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

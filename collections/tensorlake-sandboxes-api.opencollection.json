@@ -1,0 +1,168 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tensorlake Datasets Sandboxes API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sandboxes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sandboxes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/sandboxes"
+          },
+          "docs": "Lists sandboxes in the current project."
+        },
+        {
+          "info": {
+            "name": "Create a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Provisions a MicroVM sandbox for serverless workflows. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Get a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id",
+            "params": [
+              {
+                "name": "sandbox_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the sandbox."
+              }
+            ]
+          },
+          "docs": "Retrieves a sandbox by id."
+        },
+        {
+          "info": {
+            "name": "Update a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id",
+            "params": [
+              {
+                "name": "sandbox_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the sandbox."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a sandbox. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Delete a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id",
+            "params": [
+              {
+                "name": "sandbox_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the sandbox."
+              }
+            ]
+          },
+          "docs": "Deletes a sandbox."
+        },
+        {
+          "info": {
+            "name": "Snapshot a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id/snapshot",
+            "params": [
+              {
+                "name": "sandbox_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the sandbox."
+              }
+            ]
+          },
+          "docs": "Captures a point-in-time snapshot of a sandbox for later restore."
+        },
+        {
+          "info": {
+            "name": "Suspend a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id/suspend",
+            "params": [
+              {
+                "name": "sandbox_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the sandbox."
+              }
+            ]
+          },
+          "docs": "Suspends a running sandbox, pausing billing for compute."
+        },
+        {
+          "info": {
+            "name": "Resume a sandbox",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/sandboxes/:sandbox_id/resume",
+            "params": [
+              {
+                "name": "sandbox_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the sandbox."
+              }
+            ]
+          },
+          "docs": "Resumes a suspended sandbox."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

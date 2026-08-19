@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tensorlake Datasets Structured Extraction API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Structured Extraction",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Extract structured data from a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/extract",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Extracts structured JSON from a document guided by a JSON schema. Accepts a file id (or URL) plus a json_schema object describing the fields to pull. Runs asynchronously and returns a job id. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Classify a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/classify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Classifies a document into one of a supplied set of categories (for example invoice, contract, receipt). MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Read / OCR a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/read",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Runs OCR / read on a document to return raw text content per page. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Edit a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tensorlake.ai/documents/v2/edit",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Applies edits to a document (for example redaction or page operations). MODELED request body."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1539 @@
+{
+  "item": [
+    {
+      "id": "f217e106-d514-462e-9a72-017b895f9d22",
+      "name": "Datasets",
+      "description": {
+        "content": "Group documents under a shared parse/extraction configuration.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1dc0872a-e5ea-4e6f-9ea6-23cce1f56c83",
+          "name": "Create a dataset",
+          "request": {
+            "name": "Create a dataset",
+            "description": {
+              "content": "Creates a dataset that applies a shared parse / extraction configuration across the files submitted to it. MODELED request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"<string>\",\n    \"table_parsing_strategy\": \"<string>\",\n    \"table_output_mode\": \"<string>\",\n    \"signature_detection\": \"<boolean>\",\n    \"figure_detection\": \"<boolean>\"\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"<string>\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": 5121.007985600371\n      }\n    },\n    {\n      \"schema_name\": \"<string>\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "16eda93a-aa4e-4739-8d4d-2e8f156b9f05",
+              "name": "The created dataset.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"none\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"html\",\n    \"signature_detection\": false,\n    \"figure_detection\": true\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 2343.1893095873634\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"fragment\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"markdown\",\n    \"signature_detection\": false,\n    \"figure_detection\": false\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 1894,\n        \"key_1\": false\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": 3882.2213796508877,\n        \"key_2\": 9487\n      }\n    }\n  ],\n  \"id\": \"string\",\n  \"created_at\": \"2009-10-14T01:39:37.417Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0dc2137f-d31f-4373-80e5-24aa2b982764",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"none\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"html\",\n    \"signature_detection\": false,\n    \"figure_detection\": true\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 2343.1893095873634\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3113d5f-2f9d-41f2-84a8-1d4a636be7e1",
+              "name": "The request payload failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"none\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"html\",\n    \"signature_detection\": false,\n    \"figure_detection\": true\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 2343.1893095873634\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9fb087e0-32bd-40a2-b722-1cfd29b659dc",
+          "name": "List datasets",
+          "request": {
+            "name": "List datasets",
+            "description": {
+              "content": "Lists datasets in the current project.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3b668523-0e9a-493c-8f7b-636db1d375a8",
+              "name": "A page of datasets.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parsing_options\": {\n        \"chunking_strategy\": \"section\",\n        \"table_parsing_strategy\": \"string\",\n        \"table_output_mode\": \"html\",\n        \"signature_detection\": false,\n        \"figure_detection\": true\n      },\n      \"structured_extraction_options\": [\n        {\n          \"schema_name\": \"string\",\n          \"json_schema\": {\n            \"key_0\": 8304.971564753068,\n            \"key_1\": 2019.681269284318,\n            \"key_2\": 2527,\n            \"key_3\": \"string\"\n          }\n        },\n        {\n          \"schema_name\": \"string\",\n          \"json_schema\": {\n            \"key_0\": \"string\"\n          }\n        }\n      ],\n      \"id\": \"string\",\n      \"created_at\": \"1953-04-30T03:12:44.698Z\"\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"parsing_options\": {\n        \"chunking_strategy\": \"section\",\n        \"table_parsing_strategy\": \"string\",\n        \"table_output_mode\": \"markdown\",\n        \"signature_detection\": true,\n        \"figure_detection\": true\n      },\n      \"structured_extraction_options\": [\n        {\n          \"schema_name\": \"string\",\n          \"json_schema\": {\n            \"key_0\": 7296\n          }\n        },\n        {\n          \"schema_name\": \"string\",\n          \"json_schema\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          }\n        }\n      ],\n      \"id\": \"string\",\n      \"created_at\": \"1960-10-13T07:17:35.531Z\"\n    }\n  ],\n  \"next_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c800b28-bdec-410c-b809-afe0f45e12a0",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9923432-e462-4275-a7d3-7cbad61a7540",
+          "name": "Get a dataset",
+          "request": {
+            "name": "Get a dataset",
+            "description": {
+              "content": "Retrieves a dataset and its configuration by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets",
+                ":dataset_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_id",
+                  "description": "(Required) The id of the dataset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c114336-73a3-410c-a892-12c9a5d20ec1",
+              "name": "The requested dataset.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"fragment\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"markdown\",\n    \"signature_detection\": false,\n    \"figure_detection\": false\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 1894,\n        \"key_1\": false\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": 3882.2213796508877,\n        \"key_2\": 9487\n      }\n    }\n  ],\n  \"id\": \"string\",\n  \"created_at\": \"2009-10-14T01:39:37.417Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6dc33fd0-c0f1-4c3e-a62a-1c41a91ddbb8",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d7a366c-84d2-4ed7-b40a-31fb598b1c24",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f7a9283e-0d5f-44ac-a223-2e630119c107",
+          "name": "Update a dataset",
+          "request": {
+            "name": "Update a dataset",
+            "description": {
+              "content": "Updates a dataset's parse / extraction configuration. MODELED request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets",
+                ":dataset_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_id",
+                  "description": "(Required) The id of the dataset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"<string>\",\n    \"table_parsing_strategy\": \"<string>\",\n    \"table_output_mode\": \"<string>\",\n    \"signature_detection\": \"<boolean>\",\n    \"figure_detection\": \"<boolean>\"\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"<string>\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": 5121.007985600371\n      }\n    },\n    {\n      \"schema_name\": \"<string>\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "467b03dd-4e56-40d1-92a6-472cc0b2a52d",
+              "name": "The updated dataset.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"none\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"html\",\n    \"signature_detection\": false,\n    \"figure_detection\": true\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 2343.1893095873634\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"fragment\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"markdown\",\n    \"signature_detection\": false,\n    \"figure_detection\": false\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 1894,\n        \"key_1\": false\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\",\n        \"key_1\": 3882.2213796508877,\n        \"key_2\": 9487\n      }\n    }\n  ],\n  \"id\": \"string\",\n  \"created_at\": \"2009-10-14T01:39:37.417Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff2e580a-977d-4865-ba8e-c92c48fe125e",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"none\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"html\",\n    \"signature_detection\": false,\n    \"figure_detection\": true\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 2343.1893095873634\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20068281-15aa-4825-bd70-72e485e0076f",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"parsing_options\": {\n    \"chunking_strategy\": \"none\",\n    \"table_parsing_strategy\": \"string\",\n    \"table_output_mode\": \"html\",\n    \"signature_detection\": false,\n    \"figure_detection\": true\n  },\n  \"structured_extraction_options\": [\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": 2343.1893095873634\n      }\n    },\n    {\n      \"schema_name\": \"string\",\n      \"json_schema\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43ee94a2-4e94-41ff-9598-48d47c68bb0f",
+          "name": "Delete a dataset",
+          "request": {
+            "name": "Delete a dataset",
+            "description": {
+              "content": "Deletes a dataset.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets",
+                ":dataset_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_id",
+                  "description": "(Required) The id of the dataset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d81ad13f-f2a1-49b8-8782-e8ac4275ca01",
+              "name": "Deletion confirmation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"deleted\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e36fe912-92c2-46b6-bc8c-67ca95845c93",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c484f11d-2c3f-4069-a538-7291e8b258cb",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e600e988-c706-4009-ae02-6485ed5b28ac",
+          "name": "Get dataset data",
+          "request": {
+            "name": "Get dataset data",
+            "description": {
+              "content": "Retrieves the accumulated parse and structured extraction output for all documents processed under a dataset.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets",
+                ":dataset_id",
+                "data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Pagination cursor returned by a previous list call."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of items to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_id",
+                  "description": "(Required) The id of the dataset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "afa5d534-811b-4ff5-9242-2ad32efda99d",
+              "name": "A page of dataset rows.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"key_0\": \"string\"\n    },\n    {\n      \"key_0\": false,\n      \"key_1\": true\n    }\n  ],\n  \"next_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2622b9b2-56a5-456d-9d38-5dd53066ecc9",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f1ad985-41d9-4f13-b2c7-443aa2c6339c",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6203a354-2520-453c-82a0-c9ac750de5e8",
+          "name": "Submit a file to a dataset",
+          "request": {
+            "name": "Submit a file to a dataset",
+            "description": {
+              "content": "Submits a file to a dataset, parsing / extracting it with the dataset's shared configuration. Returns a parse id. MODELED request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "documents",
+                "v2",
+                "datasets",
+                ":dataset_id",
+                "parse"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_id",
+                  "description": "(Required) The id of the dataset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file_id\": \"<string>\",\n  \"file_url\": \"<uri>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ba7541f6-ea9c-4d86-9d63-69fd1bcdf0d1",
+              "name": "The parse job was accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id",
+                    "parse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_id\": \"<string>\",\n  \"file_url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parse_id\": \"string\",\n  \"status\": \"failure\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0805a81f-3aef-4e59-9047-4fb5d2e47cea",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id",
+                    "parse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_id\": \"<string>\",\n  \"file_url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "492e0254-133c-4395-a119-56ea3479ff38",
+              "name": "The request payload failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "documents",
+                    "v2",
+                    "datasets",
+                    ":dataset_id",
+                    "parse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_id",
+                      "description": "(Required) The id of the dataset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_id\": \"<string>\",\n  \"file_url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 4325.864871678094,\n      \"key_1\": 6263.636783803468\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.tensorlake.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5fdf693b-bde3-4d2d-871b-bf7d6d3c0e52",
+    "name": "Tensorlake Datasets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes. The Document Ingestion API parses documents (PDF, images, office formats) into layout-aware Markdown and structured chunks, performs schema-guided structured extraction and classification, and manages reusable files and datasets. Parsing runs as an asynchronous job: a parse request returns a parse id (job id) that is polled for results or delivered via webhook. All requests are authenticated with an API key passed as a Bearer token (Authorization: Bearer tl_apiKey_...).\nGROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods, base URL, and Bearer auth are grounded in Tensorlake's published OpenAPI document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference. Request and response BODY SCHEMAS below are MODELED from Tensorlake documentation and SDK behavior and are illustrative, not byte-exact - verify field names against the live specification before generating client code.\n\nContact Support:\n Name: Tensorlake",
+      "type": "text/plain"
+    }
+  }
+}

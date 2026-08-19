@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tensorlake Datasets Files API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/files",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor returned by a previous list call."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return."
+              }
+            ]
+          },
+          "docs": "Lists uploaded files in the current project."
+        },
+        {
+          "info": {
+            "name": "Upload a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.tensorlake.ai/documents/v2/files",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploads a document as multipart/form-data and returns a file id used in subsequent parse and extraction requests. MODELED request body."
+        },
+        {
+          "info": {
+            "name": "Delete a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tensorlake.ai/documents/v2/files/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the uploaded file."
+              }
+            ]
+          },
+          "docs": "Deletes an uploaded file by id."
+        },
+        {
+          "info": {
+            "name": "Get file metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tensorlake.ai/documents/v2/files/:file_id/metadata",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The id of the uploaded file."
+              }
+            ]
+          },
+          "docs": "Retrieves metadata (name, size, mime type, page count) for a file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
