@@ -30,6 +30,17 @@ tags:
 - Document Parsing
 - OCR
 - Data Ingestion
+- Artificial Intelligence
+- Unstructured Data
+- Document AI
+- RAG
+tags_raw:
+- Document Extraction
+- Data Extraction
+- Document Ingestion
+- Document Parsing
+- OCR
+- Data Ingestion
 - AI
 - Unstructured Data
 - Document AI
@@ -66,6 +77,8 @@ apis:
   humanURL: https://docs.tensorlake.ai/api-reference/parse/parse
   baseURL: https://api.tensorlake.ai
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
