@@ -9,6 +9,18 @@ description: Tensorlake is a document ingestion and data extraction platform for
   reusable files and datasets. Work is submitted as asynchronous parse jobs over a
   REST API and retrieved by polling or webhooks. Tensorlake Cloud also runs
   serverless workflows and MicroVM sandboxes for agentic document pipelines.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
