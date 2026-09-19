@@ -136,6 +136,8 @@ apis:
   humanURL: https://docs.tensorlake.ai/api-reference/parse/parse
   baseURL: https://api.tensorlake.ai
   tags:
+  - Sandbox
+  tags_raw:
   - Sandboxes
   properties:
   - type: OpenAPI
