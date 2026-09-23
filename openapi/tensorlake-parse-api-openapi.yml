@@ -1,9 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Tensorlake Datasets Parse API
-  description: 'Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes. The Document Ingestion API parses documents (PDF, images, office formats) into layout-aware Markdown and structured chunks, performs schema-guided structured extraction and classification, and manages reusable files and datasets. Parsing runs as an asynchronous job: a parse request returns a parse id (job id) that is polled for results or delivered via webhook. All requests are authenticated with an API key passed as a Bearer token (Authorization: Bearer tl_apiKey_...).
-
-    GROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods, base URL, and Bearer auth are grounded in Tensorlake''s published OpenAPI document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference. Request and response BODY SCHEMAS below are MODELED from Tensorlake documentation and SDK behavior and are illustrative, not byte-exact - verify field names against the live specification before generating client code.'
+  title: Tensorlake Parse API
+  description: Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes.
   version: 0.1.0
   contact:
     name: Tensorlake
@@ -105,20 +103,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return.
-      schema:
-        type: integer
-    ParseId:
-      name: parse_id
-      in: path
-      required: true
-      description: The id of the parse job.
-      schema:
-        type: string
     Cursor:
       name: cursor
       in: query
@@ -126,7 +110,118 @@ components:
       description: Pagination cursor returned by a previous list call.
       schema:
         type: string
+    ParseId:
+      name: parse_id
+      in: path
+      required: true
+      description: The id of the parse job.
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
+    ParseJobCreated:
+      type: object
+      description: Response returned when an async job is accepted. MODELED.
+      properties:
+        parse_id:
+          type: string
+          description: Identifier used to retrieve the job result.
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - successful
+          - failure
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    ParsingOptions:
+      type: object
+      description: MODELED parsing configuration.
+      properties:
+        chunking_strategy:
+          type: string
+          enum:
+          - none
+          - page
+          - section
+          - fragment
+          description: How the parsed output is split into chunks.
+        table_parsing_strategy:
+          type: string
+          description: Strategy used to detect and parse tables.
+        table_output_mode:
+          type: string
+          enum:
+          - markdown
+          - html
+          - json
+          description: Serialization format for detected tables.
+        signature_detection:
+          type: boolean
+        figure_detection:
+          type: boolean
+    ParseRequest:
+      type: object
+      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
+      properties:
+        file_id:
+          type: string
+          description: Id of a previously uploaded file.
+        file_url:
+          type: string
+          format: uri
+          description: Public URL of a document to fetch and parse.
+        raw_text:
+          type: string
+          description: Raw text or HTML to parse instead of a file.
+        page_range:
+          type: string
+          description: Pages to parse, e.g. "1-5,8".
+        parsing_options:
+          $ref: '#/components/schemas/ParsingOptions'
+        structured_extraction_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructuredExtractionOptions'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+    StructuredExtractionOptions:
+      type: object
+      description: MODELED structured extraction configuration.
+      properties:
+        schema_name:
+          type: string
+        json_schema:
+          type: object
+          additionalProperties: true
+          description: A JSON Schema object describing the fields to extract.
     ParseJob:
       type: object
       description: A parse job and, once complete, its result. MODELED.
@@ -159,103 +254,6 @@ components:
         structured_data:
           type: object
           additionalProperties: true
-    ParseRequest:
-      type: object
-      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
-      properties:
-        file_id:
-          type: string
-          description: Id of a previously uploaded file.
-        file_url:
-          type: string
-          format: uri
-          description: Public URL of a document to fetch and parse.
-        raw_text:
-          type: string
-          description: Raw text or HTML to parse instead of a file.
-        page_range:
-          type: string
-          description: Pages to parse, e.g. "1-5,8".
-        parsing_options:
-          $ref: '#/components/schemas/ParsingOptions'
-        structured_extraction_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/StructuredExtractionOptions'
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
-    StructuredExtractionOptions:
-      type: object
-      description: MODELED structured extraction configuration.
-      properties:
-        schema_name:
-          type: string
-        json_schema:
-          type: object
-          additionalProperties: true
-          description: A JSON Schema object describing the fields to extract.
-    ParseJobCreated:
-      type: object
-      description: Response returned when an async job is accepted. MODELED.
-      properties:
-        parse_id:
-          type: string
-          description: Identifier used to retrieve the job result.
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - successful
-          - failure
-    ParsingOptions:
-      type: object
-      description: MODELED parsing configuration.
-      properties:
-        chunking_strategy:
-          type: string
-          enum:
-          - none
-          - page
-          - section
-          - fragment
-          description: How the parsed output is split into chunks.
-        table_parsing_strategy:
-          type: string
-          description: Strategy used to detect and parse tables.
-        table_output_mode:
-          type: string
-          enum:
-          - markdown
-          - html
-          - json
-          description: Serialization format for detected tables.
-        signature_detection:
-          type: boolean
-        figure_detection:
-          type: boolean
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: object
-              additionalProperties: true
   responses:
     ValidationError:
       description: The request payload failed validation.
@@ -263,14 +261,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing or invalid Bearer token.
       content:
         application/json:
           schema:

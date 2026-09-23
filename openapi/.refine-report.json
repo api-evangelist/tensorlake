@@ -1,11 +1,7 @@
 {
   "provider": "tensorlake",
   "sources": [
-    "tensorlake-datasets-api-openapi.yml",
-    "tensorlake-files-api-openapi.yml",
-    "tensorlake-parse-api-openapi.yml",
-    "tensorlake-sandboxes-api-openapi.yml",
-    "tensorlake-structured-extraction-api-openapi.yml"
+    "_original/tensorlake-openapi.yml"
   ],
   "outputs": [
     "tensorlake-datasets-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tensorlake-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "tensorlake-datasets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tensorlake-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tensorlake-parse-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tensorlake-sandboxes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tensorlake-structured-extraction-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

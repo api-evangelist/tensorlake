@@ -1,9 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Tensorlake Datasets Files API
-  description: 'Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes. The Document Ingestion API parses documents (PDF, images, office formats) into layout-aware Markdown and structured chunks, performs schema-guided structured extraction and classification, and manages reusable files and datasets. Parsing runs as an asynchronous job: a parse request returns a parse id (job id) that is polled for results or delivered via webhook. All requests are authenticated with an API key passed as a Bearer token (Authorization: Bearer tl_apiKey_...).
-
-    GROUNDING NOTE (API Evangelist, 2026-07-12): The path list, HTTP methods, base URL, and Bearer auth are grounded in Tensorlake''s published OpenAPI document (docs.tensorlake.ai/api-reference/openapi.yaml) and API reference. Request and response BODY SCHEMAS below are MODELED from Tensorlake documentation and SDK behavior and are illustrative, not byte-exact - verify field names against the live specification before generating client code.'
+  title: Tensorlake Files API
+  description: Tensorlake Cloud APIs for Document Ingestion, Serverless Workflows, and Sandboxes.
   version: 0.1.0
   contact:
     name: Tensorlake
@@ -110,6 +108,13 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   parameters:
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Pagination cursor returned by a previous list call.
+      schema:
+        type: string
     FileId:
       name: file_id
       in: path
@@ -124,27 +129,20 @@ components:
       description: Maximum number of items to return.
       schema:
         type: integer
-    Cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Pagination cursor returned by a previous list call.
-      schema:
-        type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
     DeleteResponse:
       type: object
       properties:
@@ -169,19 +167,19 @@ components:
         created_at:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: object
-              additionalProperties: true
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
