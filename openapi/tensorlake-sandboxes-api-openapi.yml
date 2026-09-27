@@ -179,6 +179,22 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    Sandbox:
+      allOf:
+      - $ref: '#/components/schemas/SandboxInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+            enum:
+            - running
+            - suspended
+            - stopped
+          created_at:
+            type: string
+            format: date-time
     Error:
       type: object
       properties:
@@ -199,22 +215,6 @@ components:
           type: string
         deleted:
           type: boolean
-    Sandbox:
-      allOf:
-      - $ref: '#/components/schemas/SandboxInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-            enum:
-            - running
-            - suspended
-            - stopped
-          created_at:
-            type: string
-            format: date-time
     SandboxInput:
       type: object
       description: MODELED sandbox configuration.

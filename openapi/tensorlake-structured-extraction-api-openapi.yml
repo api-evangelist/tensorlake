@@ -112,7 +112,33 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
+  responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
     ClassifyRequest:
       type: object
       description: MODELED classification request.
@@ -132,19 +158,6 @@ components:
                 type: string
               description:
                 type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: object
-              additionalProperties: true
     ParseJobCreated:
       type: object
       description: Response returned when an async job is accepted. MODELED.
@@ -195,19 +208,6 @@ components:
           items:
             type: object
             additionalProperties: true
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
