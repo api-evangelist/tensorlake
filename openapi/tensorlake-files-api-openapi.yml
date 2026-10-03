@@ -107,28 +107,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    FileId:
-      name: file_id
-      in: path
-      required: true
-      description: The id of the uploaded file.
-      schema:
-        type: string
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return.
-      schema:
-        type: integer
-    Cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Pagination cursor returned by a previous list call.
-      schema:
-        type: string
   schemas:
     Error:
       type: object
@@ -167,6 +145,28 @@ components:
         created_at:
           type: string
           format: date-time
+  parameters:
+    FileId:
+      name: file_id
+      in: path
+      required: true
+      description: The id of the uploaded file.
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Pagination cursor returned by a previous list call.
+      schema:
+        type: string
   responses:
     NotFound:
       description: The requested resource was not found.

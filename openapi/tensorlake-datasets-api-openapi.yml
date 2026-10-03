@@ -179,36 +179,17 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Dataset:
-      allOf:
-      - $ref: '#/components/schemas/DatasetInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          created_at:
-            type: string
-            format: date-time
+    StructuredExtractionOptions:
+      type: object
+      description: MODELED structured extraction configuration.
+      properties:
+        schema_name:
+          type: string
+        json_schema:
+          type: object
+          additionalProperties: true
+          description: A JSON Schema object describing the fields to extract.
     Error:
       type: object
       properties:
@@ -222,6 +203,20 @@ components:
             details:
               type: object
               additionalProperties: true
+    ParseJobCreated:
+      type: object
+      description: Response returned when an async job is accepted. MODELED.
+      properties:
+        parse_id:
+          type: string
+          description: Identifier used to retrieve the job result.
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - successful
+          - failure
     DatasetInput:
       type: object
       description: MODELED dataset configuration.
@@ -269,30 +264,16 @@ components:
           type: boolean
         figure_detection:
           type: boolean
-    ParseJobCreated:
-      type: object
-      description: Response returned when an async job is accepted. MODELED.
-      properties:
-        parse_id:
-          type: string
-          description: Identifier used to retrieve the job result.
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - successful
-          - failure
-    StructuredExtractionOptions:
-      type: object
-      description: MODELED structured extraction configuration.
-      properties:
-        schema_name:
-          type: string
-        json_schema:
-          type: object
-          additionalProperties: true
-          description: A JSON Schema object describing the fields to extract.
+    Dataset:
+      allOf:
+      - $ref: '#/components/schemas/DatasetInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          created_at:
+            type: string
+            format: date-time
     DatasetParseRequest:
       type: object
       description: MODELED request to submit a file to a dataset.
@@ -303,13 +284,6 @@ components:
           type: string
           format: uri
   parameters:
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      description: The id of the dataset.
-      schema:
-        type: string
     Limit:
       name: limit
       in: query
@@ -324,6 +298,32 @@ components:
       description: Pagination cursor returned by a previous list call.
       schema:
         type: string
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      description: The id of the dataset.
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

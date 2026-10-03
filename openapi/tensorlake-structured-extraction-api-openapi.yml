@@ -112,19 +112,6 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -139,6 +126,31 @@ components:
             details:
               type: object
               additionalProperties: true
+    EditRequest:
+      type: object
+      description: MODELED edit request.
+      properties:
+        file_id:
+          type: string
+        operations:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    ParseJobCreated:
+      type: object
+      description: Response returned when an async job is accepted. MODELED.
+      properties:
+        parse_id:
+          type: string
+          description: Identifier used to retrieve the job result.
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - successful
+          - failure
     ClassifyRequest:
       type: object
       description: MODELED classification request.
@@ -158,31 +170,6 @@ components:
                 type: string
               description:
                 type: string
-    ParseJobCreated:
-      type: object
-      description: Response returned when an async job is accepted. MODELED.
-      properties:
-        parse_id:
-          type: string
-          description: Identifier used to retrieve the job result.
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - successful
-          - failure
-    ReadRequest:
-      type: object
-      description: MODELED read / OCR request.
-      properties:
-        file_id:
-          type: string
-        file_url:
-          type: string
-          format: uri
-        page_range:
-          type: string
     ExtractRequest:
       type: object
       description: MODELED structured extraction request.
@@ -197,17 +184,30 @@ components:
           additionalProperties: true
         page_range:
           type: string
-    EditRequest:
+    ReadRequest:
       type: object
-      description: MODELED edit request.
+      description: MODELED read / OCR request.
       properties:
         file_id:
           type: string
-        operations:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
+        file_url:
+          type: string
+          format: uri
+        page_range:
+          type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

@@ -102,26 +102,17 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    StructuredExtractionOptions:
+      type: object
+      description: MODELED structured extraction configuration.
+      properties:
+        schema_name:
+          type: string
+        json_schema:
+          type: object
+          additionalProperties: true
+          description: A JSON Schema object describing the fields to extract.
     Error:
       type: object
       properties:
@@ -135,66 +126,6 @@ components:
             details:
               type: object
               additionalProperties: true
-    ParseRequest:
-      type: object
-      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
-      properties:
-        file_id:
-          type: string
-          description: Id of a previously uploaded file.
-        file_url:
-          type: string
-          format: uri
-          description: Public URL of a document to fetch and parse.
-        raw_text:
-          type: string
-          description: Raw text or HTML to parse instead of a file.
-        page_range:
-          type: string
-          description: Pages to parse, e.g. "1-5,8".
-        parsing_options:
-          $ref: '#/components/schemas/ParsingOptions'
-        structured_extraction_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/StructuredExtractionOptions'
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
-    ParsingOptions:
-      type: object
-      description: MODELED parsing configuration.
-      properties:
-        chunking_strategy:
-          type: string
-          enum:
-          - none
-          - page
-          - section
-          - fragment
-          description: How the parsed output is split into chunks.
-        table_parsing_strategy:
-          type: string
-          description: Strategy used to detect and parse tables.
-        table_output_mode:
-          type: string
-          enum:
-          - markdown
-          - html
-          - json
-          description: Serialization format for detected tables.
-        signature_detection:
-          type: boolean
-        figure_detection:
-          type: boolean
     ParseJobCreated:
       type: object
       description: Response returned when an async job is accepted. MODELED.
@@ -209,6 +140,13 @@ components:
           - processing
           - successful
           - failure
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
     ParseJob:
       type: object
       description: A parse job and, once complete, its result. MODELED.
@@ -241,24 +179,60 @@ components:
         structured_data:
           type: object
           additionalProperties: true
-    StructuredExtractionOptions:
+    ParsingOptions:
       type: object
-      description: MODELED structured extraction configuration.
+      description: MODELED parsing configuration.
       properties:
-        schema_name:
+        chunking_strategy:
           type: string
-        json_schema:
+          enum:
+          - none
+          - page
+          - section
+          - fragment
+          description: How the parsed output is split into chunks.
+        table_parsing_strategy:
+          type: string
+          description: Strategy used to detect and parse tables.
+        table_output_mode:
+          type: string
+          enum:
+          - markdown
+          - html
+          - json
+          description: Serialization format for detected tables.
+        signature_detection:
+          type: boolean
+        figure_detection:
+          type: boolean
+    ParseRequest:
+      type: object
+      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
+      properties:
+        file_id:
+          type: string
+          description: Id of a previously uploaded file.
+        file_url:
+          type: string
+          format: uri
+          description: Public URL of a document to fetch and parse.
+        raw_text:
+          type: string
+          description: Raw text or HTML to parse instead of a file.
+        page_range:
+          type: string
+          description: Pages to parse, e.g. "1-5,8".
+        parsing_options:
+          $ref: '#/components/schemas/ParsingOptions'
+        structured_extraction_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructuredExtractionOptions'
+        labels:
           type: object
-          additionalProperties: true
-          description: A JSON Schema object describing the fields to extract.
+          additionalProperties:
+            type: string
   parameters:
-    ParseId:
-      name: parse_id
-      in: path
-      required: true
-      description: The id of the parse job.
-      schema:
-        type: string
     Limit:
       name: limit
       in: query
@@ -266,6 +240,13 @@ components:
       description: Maximum number of items to return.
       schema:
         type: integer
+    ParseId:
+      name: parse_id
+      in: path
+      required: true
+      description: The id of the parse job.
+      schema:
+        type: string
     Cursor:
       name: cursor
       in: query
@@ -273,6 +254,25 @@ components:
       description: Pagination cursor returned by a previous list call.
       schema:
         type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

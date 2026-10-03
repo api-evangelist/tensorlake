@@ -179,22 +179,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Sandbox:
-      allOf:
-      - $ref: '#/components/schemas/SandboxInput'
-      - type: object
-        properties:
-          id:
-            type: string
-          status:
-            type: string
-            enum:
-            - running
-            - suspended
-            - stopped
-          created_at:
-            type: string
-            format: date-time
     Error:
       type: object
       properties:
@@ -215,6 +199,22 @@ components:
           type: string
         deleted:
           type: boolean
+    Sandbox:
+      allOf:
+      - $ref: '#/components/schemas/SandboxInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          status:
+            type: string
+            enum:
+            - running
+            - suspended
+            - stopped
+          created_at:
+            type: string
+            format: date-time
     SandboxInput:
       type: object
       description: MODELED sandbox configuration.
@@ -230,14 +230,6 @@ components:
           type: integer
         disk_gb:
           type: integer
-  parameters:
-    SandboxId:
-      name: sandbox_id
-      in: path
-      required: true
-      description: The id of the sandbox.
-      schema:
-        type: string
   responses:
     NotFound:
       description: The requested resource was not found.
@@ -251,6 +243,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    SandboxId:
+      name: sandbox_id
+      in: path
+      required: true
+      description: The id of the sandbox.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http
