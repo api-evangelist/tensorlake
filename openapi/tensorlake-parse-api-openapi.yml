@@ -103,29 +103,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    StructuredExtractionOptions:
-      type: object
-      description: MODELED structured extraction configuration.
-      properties:
-        schema_name:
-          type: string
-        json_schema:
-          type: object
-          additionalProperties: true
-          description: A JSON Schema object describing the fields to extract.
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: object
-              additionalProperties: true
     ParseJobCreated:
       type: object
       description: Response returned when an async job is accepted. MODELED.
@@ -140,6 +117,43 @@ components:
           - processing
           - successful
           - failure
+    ParseRequest:
+      type: object
+      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
+      properties:
+        file_id:
+          type: string
+          description: Id of a previously uploaded file.
+        file_url:
+          type: string
+          format: uri
+          description: Public URL of a document to fetch and parse.
+        raw_text:
+          type: string
+          description: Raw text or HTML to parse instead of a file.
+        page_range:
+          type: string
+          description: Pages to parse, e.g. "1-5,8".
+        parsing_options:
+          $ref: '#/components/schemas/ParsingOptions'
+        structured_extraction_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructuredExtractionOptions'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+    StructuredExtractionOptions:
+      type: object
+      description: MODELED structured extraction configuration.
+      properties:
+        schema_name:
+          type: string
+        json_schema:
+          type: object
+          additionalProperties: true
+          description: A JSON Schema object describing the fields to extract.
     DeleteResponse:
       type: object
       properties:
@@ -179,6 +193,19 @@ components:
         structured_data:
           type: object
           additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
     ParsingOptions:
       type: object
       description: MODELED parsing configuration.
@@ -205,56 +232,13 @@ components:
           type: boolean
         figure_detection:
           type: boolean
-    ParseRequest:
-      type: object
-      description: Parse request. Supply exactly one document source (file_id, file_url, or raw_text). MODELED - field names are illustrative.
-      properties:
-        file_id:
-          type: string
-          description: Id of a previously uploaded file.
-        file_url:
-          type: string
-          format: uri
-          description: Public URL of a document to fetch and parse.
-        raw_text:
-          type: string
-          description: Raw text or HTML to parse instead of a file.
-        page_range:
-          type: string
-          description: Pages to parse, e.g. "1-5,8".
-        parsing_options:
-          $ref: '#/components/schemas/ParsingOptions'
-        structured_extraction_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/StructuredExtractionOptions'
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Maximum number of items to return.
-      schema:
-        type: integer
-    ParseId:
-      name: parse_id
-      in: path
-      required: true
-      description: The id of the parse job.
-      schema:
-        type: string
-    Cursor:
-      name: cursor
-      in: query
-      required: false
-      description: Pagination cursor returned by a previous list call.
-      schema:
-        type: string
   responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: The requested resource was not found.
       content:
@@ -267,12 +251,28 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Maximum number of items to return.
+      schema:
+        type: integer
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Pagination cursor returned by a previous list call.
+      schema:
+        type: string
+    ParseId:
+      name: parse_id
+      in: path
+      required: true
+      description: The id of the parse job.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

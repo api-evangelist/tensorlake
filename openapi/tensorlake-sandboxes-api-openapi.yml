@@ -179,19 +179,21 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Error:
+    SandboxInput:
       type: object
+      description: MODELED sandbox configuration.
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: object
-              additionalProperties: true
+        name:
+          type: string
+        image:
+          type: string
+          description: Base image for the MicroVM sandbox.
+        cpu:
+          type: number
+        memory_mb:
+          type: integer
+        disk_gb:
+          type: integer
     DeleteResponse:
       type: object
       properties:
@@ -215,21 +217,19 @@ components:
           created_at:
             type: string
             format: date-time
-    SandboxInput:
+    Error:
       type: object
-      description: MODELED sandbox configuration.
       properties:
-        name:
-          type: string
-        image:
-          type: string
-          description: Base image for the MicroVM sandbox.
-        cpu:
-          type: number
-        memory_mb:
-          type: integer
-        disk_gb:
-          type: integer
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
   responses:
     NotFound:
       description: The requested resource was not found.

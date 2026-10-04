@@ -113,30 +113,6 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: object
-              additionalProperties: true
-    EditRequest:
-      type: object
-      description: MODELED edit request.
-      properties:
-        file_id:
-          type: string
-        operations:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
     ParseJobCreated:
       type: object
       description: Response returned when an async job is accepted. MODELED.
@@ -151,25 +127,6 @@ components:
           - processing
           - successful
           - failure
-    ClassifyRequest:
-      type: object
-      description: MODELED classification request.
-      properties:
-        file_id:
-          type: string
-        file_url:
-          type: string
-          format: uri
-        classes:
-          type: array
-          description: Candidate categories to classify the document into.
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              description:
-                type: string
     ExtractRequest:
       type: object
       description: MODELED structured extraction request.
@@ -195,15 +152,58 @@ components:
           format: uri
         page_range:
           type: string
+    ClassifyRequest:
+      type: object
+      description: MODELED classification request.
+      properties:
+        file_id:
+          type: string
+        file_url:
+          type: string
+          format: uri
+        classes:
+          type: array
+          description: Candidate categories to classify the document into.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+    EditRequest:
+      type: object
+      description: MODELED edit request.
+      properties:
+        file_id:
+          type: string
+        operations:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+              additionalProperties: true
   responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token.
+    ValidationError:
+      description: The request payload failed validation.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
+    Unauthorized:
+      description: Missing or invalid Bearer token.
       content:
         application/json:
           schema:
