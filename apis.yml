@@ -177,6 +177,8 @@ apis:
   - type: Documentation
     url: https://docs.tensorlake.ai/sandboxes/introduction
 common:
+- type: Pricing
+  url: https://www.tensorlake.ai/pricing
 - type: AgenticAccess
   url: agentic-access/tensorlake-agentic-access.yml
 - type: DomainSecurity
