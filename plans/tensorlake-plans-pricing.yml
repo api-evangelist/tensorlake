@@ -1,131 +1,248 @@
-specification: API Commons Plans
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
-provider: Tensorlake
-providerId: tensorlake
-created: '2026-07-12'
-modified: '2026-07-12'
-reconciled: false
-tags:
-- Document Extraction
-- Document Ingestion
-- OCR
-- AI
-- Plans
-description: >-
-  Tensorlake Cloud bills on a credit / usage basis, where 1 credit is worth
-  $0.01. Document ingestion is priced by the page - published rates put document
-  parsing and extraction at roughly $10 per 1,000 pages ($0.01 per page).
-  Serverless workflows and MicroVM sandboxes are metered separately on compute
-  (CPU per hour, RAM per GB-hour, disk per GB-hour, snapshot storage per
-  GB-month), billed by the second. Tiers observed on the pricing page are Free,
-  On-Demand (pay-as-you-go), Pro ($250/month + usage), and Enterprise (custom,
-  in-VPC). Exact per-unit rates are not reconciled here - verify on the
-  Tensorlake pricing page.
-notes: >-
-  Document-ingestion per-page pricing and sandbox compute rates come from the
-  Tensorlake pricing page and third-party listings and may change. The
-  $10-per-1,000-pages figure and the four tiers below should be confirmed during
-  reconciliation.
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://www.tensorlake.ai/pricing
 sources:
 - https://www.tensorlake.ai/pricing
-- https://docs.tensorlake.ai
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T112025
+  grounding: every price_text was found verbatim in the fetched page text
+audience: developer-api
+pricing_basis: usage-other
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-07'
+  evidence: In-VPC / on-prem
+  managed_tier: Usage Credits
+published: true
+note: Sandbox compute pricing with prepaid credits (1 CU = $0.01), Pro subscription with included CUs,
+  and custom Enterprise. Network egress free.
+plan_count: 14
+currency: USD
 plans:
-- id: tensorlake-free
-  name: Free
-  type: free
-  description: >-
-    Free tier for evaluation, including a starter credit allowance and a small
-    number of concurrent sandboxes with bounded session time.
-  entries:
-  - label: Free Credits
-    name: free_credits
-    type: usage
-    metric: credits
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1
-    price: $0 up to the free-tier credit allowance
-    userMultiplied: false
-  elements:
-  - name: Document Ingestion API
-  - name: Up to 2 Concurrent Sandboxes
-  - name: Bounded Session Time
-- id: tensorlake-on-demand
-  name: On-Demand
-  type: usage
-  description: >-
-    Pay-as-you-go usage with no base fee, scaling concurrency on demand. Document
-    ingestion billed per page (credits); sandbox runtime billed per second on
-    compute meters.
-  entries:
-  - label: Document Pages
-    name: document_pages
-    type: usage
-    metric: pages
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1000
-    price: approx. $10 per 1,000 pages (1 credit = $0.01 per page); verify
-    userMultiplied: false
-  - label: Sandbox Compute
-    name: sandbox_compute
-    type: usage
-    metric: compute
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1
-    price: metered CPU/RAM/disk/snapshot, billed by the second; see pricing page
-    userMultiplied: false
-  elements:
-  - name: Document Ingestion API
-  - name: Serverless Workflows and Sandboxes
-  - name: Scales to 100 Concurrent Sandboxes
-- id: tensorlake-pro
-  name: Pro
-  type: paid
-  description: >-
-    Monthly subscription with higher concurrency and discounted On-Demand
-    compute rates, plus usage on top.
-  entries:
-  - label: Monthly Subscription
-    name: pro_subscription
-    type: flat
-    metric: subscription
-    limit: 1
-    timeFrame: month
-    geo: global
-    unit: 1
-    price: $250/month + usage
-    userMultiplied: false
-  elements:
-  - name: Up to 1,000 Concurrent Sandboxes
-  - name: Discounted Compute Rates
-  - name: Document Ingestion API
-- id: tensorlake-enterprise
-  name: Enterprise
-  type: enterprise
-  description: >-
-    Custom plan for high-volume usage with unlimited concurrency, in-VPC
-    deployment, security review, SLAs, and negotiated terms. Contact Tensorlake.
-  entries:
-  - label: Enterprise Agreement
-    name: enterprise
-    type: flat
-    metric: contract
-    limit: -1
-    timeFrame: year
-    geo: global
-    unit: 1
-    price: contact sales
-    userMultiplied: false
-  elements:
-  - name: Unlimited Concurrency
-  - name: In-VPC Deployment
-  - name: SLAs and Support
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+- name: Free
+  price_text: $0 forever
+  price: 0
+  currency: USD
+  period: none
+  included_quota: 1 sandbox at a time, 1 vCPU · 1 GB RAM · 10 GB disk, up to 2 hours per sandbox session,
+    unmetered sessions, SOC 2 Type 2, 7 day retention
+- name: Usage Credits
+  price_text: $5 starting credit pack
+  price: 5
+  currency: USD
+  period: one-time
+  unit: credit pack
+  included_quota: $5–$20 prepaid packs, 500–2,000 CUs · $0.01 per CU; up to 100 concurrent sandboxes,
+    up to 4 vCPU · 16 GB RAM · 100 GB disk, up to 24 hours per session
+  overage: no postpaid overage
+- name: Pro
+  price_text: $250 per billing cycle
+  price: 250
+  currency: USD
+  period: month
+  unit: billing cycle
+  included_quota: 25,000 CU ($250 of usage) per billing cycle; 1,000 concurrent sandboxes, up to 16 vCPU
+    · 64 GB RAM · 100 GB disk, unlimited duration
+  overage: $0.01 per CU
+- name: Enterprise
+  price_text: Custom quote
+  period: none
+  included_quota: Unlimited concurrency, custom ceilings, HIPAA + SOC 2 Type 2, SSO/SAML, RBAC, DPA, in-VPC/on-prem,
+    P1 SLA 1 hour
+- name: Credit pack 01
+  price_text: $5
+  price: 5
+  currency: USD
+  period: one-time
+  unit: 500 CUs
+  included_quota: 500 CUs
+- name: Credit pack 02
+  price_text: $10
+  price: 10
+  currency: USD
+  period: one-time
+  unit: 1,000 CUs
+  included_quota: 1,000 CUs
+- name: Credit pack 03
+  price_text: $20
+  price: 20
+  currency: USD
+  period: one-time
+  unit: 2,000 CUs
+  included_quota: 2,000 CUs
+- name: Active CPU per core-hour (Usage Credits)
+  price_text: $0.07
+  price: 0.07
+  currency: USD
+  period: per-use
+  unit: core-hour
+- name: Active CPU per core-hour (Pro)
+  price_text: $0.042
+  price: 0.042
+  currency: USD
+  period: per-use
+  unit: core-hour
+- name: 1 GB RAM per hour (Usage Credits)
+  price_text: $0.015
+  price: 0.015
+  currency: USD
+  period: per-use
+  unit: GB-hour
+- name: 1 GB RAM per hour (Pro)
+  price_text: $0.009
+  price: 0.009
+  currency: USD
+  period: per-use
+  unit: GB-hour
+- name: Disk per GB-hour (Usage Credits)
+  price_text: $0.0002
+  price: 0.0002
+  currency: USD
+  period: per-use
+  unit: GB-hour
+- name: Disk per GB-hour (Pro)
+  price_text: $0.0001
+  price: 0.0001
+  currency: USD
+  period: per-use
+  unit: GB-hour
+- name: Snapshot storage per GB-month
+  price_text: $0.07
+  price: 0.07
+  currency: USD
+  period: month
+  unit: GB-month
+rate_limit_statements:
+- 1 sandbox at a time
+- Up to 100 concurrent sandboxes
+- 1,000 concurrent sandboxes
+- Up to 2 hours Per sandbox session
+- Up to 24 hours Per sandbox session
+- Unlimited duration Per sandbox session
+- the same 5M-per-project ceiling
+- buy up to 10 packs at once
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - hybrid
+  - subscription
+  units:
+  - compute
+  - credit
+  - data
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Usage Credits
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - credit
+    periods:
+    - one-time
+  - name: Pro
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Credit pack 01
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - one-time
+  - name: Credit pack 02
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - one-time
+  - name: Credit pack 03
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - one-time
+  - name: Active CPU per core-hour (Usage Credits)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: Active CPU per core-hour (Pro)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - compute
+    periods:
+    - other
+  - name: 1 GB RAM per hour (Usage Credits)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - data
+    periods:
+    - other
+  - name: 1 GB RAM per hour (Pro)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - data
+    periods:
+    - other
+  - name: Disk per GB-hour (Usage Credits)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - data
+    periods:
+    - other
+  - name: Disk per GB-hour (Pro)
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - data
+    periods:
+    - other
+  - name: Snapshot storage per GB-month
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - data
+    periods:
+    - month
