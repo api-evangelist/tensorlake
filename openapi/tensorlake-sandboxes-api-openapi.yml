@@ -178,29 +178,20 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    SandboxInput:
-      type: object
-      description: MODELED sandbox configuration.
-      properties:
-        name:
-          type: string
-        image:
-          type: string
-          description: Base image for the MicroVM sandbox.
-        cpu:
-          type: number
-        memory_mb:
-          type: integer
-        disk_gb:
-          type: integer
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
     Sandbox:
       allOf:
       - $ref: '#/components/schemas/SandboxInput'
@@ -230,19 +221,28 @@ components:
             details:
               type: object
               additionalProperties: true
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    SandboxInput:
+      type: object
+      description: MODELED sandbox configuration.
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          description: Base image for the MicroVM sandbox.
+        cpu:
+          type: number
+        memory_mb:
+          type: integer
+        disk_gb:
+          type: integer
   parameters:
     SandboxId:
       name: sandbox_id
