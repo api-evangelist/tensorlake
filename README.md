@@ -1,4 +1,4 @@
-# Tensorlake (tensorlake)
+# Tensorlake
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,91 +64,127 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Tensorlake is a document ingestion and data extraction platform for AI applications. Its Document Ingestion API parses PDFs, images, and other documents into layout-aware Markdown and structured chunks (OCR, tables, figures, signatures), performs schema-guided structured extraction and classification, and manages reusable files and datasets. Tensorlake Cloud also runs serverless workflows and MicroVM sandboxes for agentic document pipelines.
+Tensorlake is a document ingestion and data extraction platform for AI applications. Its Document Ingestion API parses PDFs, images, and other documents into layout-aware Markdown and structured chunks (OCR, tables, figures, signatures), performs schema-guided structured extraction and classification, and manages reusable files and datasets. Work is submitted as asynchronous parse jobs over a REST API and retrieved by polling or webhooks. Tensorlake Cloud also runs serverless workflows and MicroVM sandboxes for agentic document pipelines.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/tensorlake/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/tensorlake/refs/heads/main/apis.yml)
+**Areas:** Document Extraction · Data Extraction · Document Ingestion · Document Parsing · OCR · Data Ingestion · Artificial Intelligence · Unstructured Data · Document AI · RAG
 
-## Access Model (Honest Summary)
+## Tensorlake on APIs.io
 
-- **Public, key-gated REST API.** The API is live at `https://api.tensorlake.ai` and is REST over HTTPS. An unauthenticated request returns HTTP 401 — Bearer auth is enforced.
-- **Authentication:** API key created in the Tensorlake Cloud dashboard (`cloud.tensorlake.ai`), prefixed `tl_apiKey_`, passed as `Authorization: Bearer <token>`.
-- **Asynchronous jobs, not sockets.** Parsing and extraction are submitted as jobs that return a `parse_id`; results are read back by polling `GET /documents/v2/parse/{parse_id}` or delivered via webhook. There is **no documented public WebSocket API** — see `review.yml`.
-- **Confirmed vs modeled.** The endpoint **paths, HTTP methods, base URL, and Bearer auth are grounded** in Tensorlake's published OpenAPI document and API reference. The **request/response body schemas in `openapi/tensorlake-openapi.yml` are modeled** from the documentation and SDK behavior and are illustrative — verify field names against the live spec before generating client code. Modeled schemas are flagged inline.
-- **Pricing is usage-based and not reconciled** in this entry (`reconciled: false`) — figures come from the public pricing page and third-party listings.
+Everything profiled for Tensorlake is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/tensorlake/](https://apis.io/providers/tensorlake/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Document Extraction
-- Data Extraction
-- Document Ingestion
-- Document Parsing
-- OCR
-- Data Ingestion
-- AI
-- Unstructured Data
-- Document AI
-- RAG
+- [Tensorlake Datasets API](https://apis.io/apis/tensorlake/tensorlake-datasets-api/) — Group documents under a shared parse/extraction configuration.
+- [Tensorlake Files API](https://apis.io/apis/tensorlake/tensorlake-files-api/) — Upload and manage files referenced by parse and extraction jobs.
+- [Tensorlake Parse API](https://apis.io/apis/tensorlake/tensorlake-parse-api/) — Asynchronous document parsing jobs.
+- [Tensorlake Sandboxes API](https://apis.io/apis/tensorlake/tensorlake-sandboxes-api/) — MicroVM sandboxes for serverless workflows and agent code.
+- [Tensorlake Structured Extraction API](https://apis.io/apis/tensorlake/tensorlake-structured-extraction-api/) — Schema-guided extraction, classification, read/OCR, and edit.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-07-12
-- **Modified:** 2026-07-12
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Tensorlake Document Parse API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-Submit a file, URL, or raw text/HTML for document parsing and retrieve layout-aware Markdown, page fragments, tables, and figures. Parsing runs as an asynchronous job — `POST /documents/v2/parse` returns a parse id, and results are read back with `GET /documents/v2/parse/{parse_id}` (or via webhook). Jobs can be listed and deleted.
+- [Tensorlake Agentic Access](https://apis.io/agentic-access/tensorlake/tensorlake-agentic-access/)
 
-- **Human URL:** [https://docs.tensorlake.ai/api-reference/parse/parse](https://docs.tensorlake.ai/api-reference/parse/parse)
-- **Base URL:** `https://api.tensorlake.ai`
+#### Collections (6)
 
-### Tensorlake Structured Extraction API
+Postman and Open Collection request collections.
 
-Extract structured JSON from documents guided by a JSON schema (`POST /documents/v2/extract`), classify documents (`POST /documents/v2/classify`), read/OCR raw content (`POST /documents/v2/read`), and apply edits (`POST /documents/v2/edit`). Turns unstructured documents into schema-conformant data for RAG and agent pipelines.
+- [Tensorlake API](https://apis.io/collections/tensorlake/open-tensorlake/)
+- [Tensorlake Datasets API](https://apis.io/collections/tensorlake/open-tensorlake-datasets-api/)
+- [Tensorlake Datasets Files API](https://apis.io/collections/tensorlake/open-tensorlake-files-api/)
+- [Tensorlake Datasets Parse API](https://apis.io/collections/tensorlake/open-tensorlake-parse-api/)
+- [Tensorlake Datasets Sandboxes API](https://apis.io/collections/tensorlake/open-tensorlake-sandboxes-api/)
+- [Tensorlake Datasets Structured Extraction API](https://apis.io/collections/tensorlake/open-tensorlake-structured-extraction-api/)
 
-- **Human URL:** [https://docs.tensorlake.ai/document-ingestion/parsing/structured-extraction](https://docs.tensorlake.ai/document-ingestion/parsing/structured-extraction)
-- **Base URL:** `https://api.tensorlake.ai`
+#### Security (2)
 
-### Tensorlake Files API
+Authentication, trust centre, and vulnerability disclosure.
 
-Upload and manage the files that parse and extraction jobs run against. Upload a file (`PUT /documents/v2/files`), list files (`GET /documents/v2/files`), read file metadata (`GET /documents/v2/files/{file_id}/metadata`), and delete a file (`DELETE /documents/v2/files/{file_id}`).
+- [Tensorlake Authentication](https://apis.io/security/tensorlake/tensorlake-authentication/)
+- [Tensorlake Domain Security](https://apis.io/security/tensorlake/tensorlake-domain-security/)
 
-- **Human URL:** [https://docs.tensorlake.ai/api-reference/introduction](https://docs.tensorlake.ai/api-reference/introduction)
-- **Base URL:** `https://api.tensorlake.ai`
+#### Plans and pricing (1)
 
-### Tensorlake Datasets API
+Published plans, tiers and prices.
 
-Group documents into datasets that apply a consistent parse and extraction configuration across many files. Create, list, get, update, and delete datasets, submit files to a dataset for processing (`POST /documents/v2/datasets/{dataset_id}/parse`), and read the accumulated structured output (`GET /documents/v2/datasets/{dataset_id}/data`).
+- [Tensorlake Plans Pricing](https://apis.io/plans/tensorlake/tensorlake-plans-pricing/)
 
-- **Human URL:** [https://docs.tensorlake.ai/api-reference/introduction](https://docs.tensorlake.ai/api-reference/introduction)
-- **Base URL:** `https://api.tensorlake.ai`
+#### Rate limits (1)
 
-### Tensorlake Sandboxes API
+Published request limits.
 
-Provision and manage MicroVM sandboxes that run serverless workflows and agent code alongside document ingestion. Create, list, get, update, and delete sandboxes, and snapshot, suspend, or resume them for durable, resumable execution.
+- [Tensorlake Rate Limits](https://apis.io/rate-limits/tensorlake/tensorlake-rate-limits/)
 
-- **Human URL:** [https://docs.tensorlake.ai/sandboxes/introduction](https://docs.tensorlake.ai/sandboxes/introduction)
-- **Base URL:** `https://api.tensorlake.ai`
+#### FinOps (1)
 
-## Common Properties
+What the API costs to run, by operation.
 
-- [Domain Security](security/tensorlake-domain-security.yml)
-- [Authentication](authentication/tensorlake-authentication.yml)
-- [GitHub Organization](https://github.com/tensorlakeai)
-- [LinkedIn](https://www.linkedin.com/company/tensorlake)
+- [Tensorlake Finops](https://apis.io/finops/tensorlake/tensorlake-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.tensorlake.ai)
 - [Documentation](https://docs.tensorlake.ai)
-- [Plans](plans/tensorlake-plans-pricing.yml)
-- [Rate Limits](rate-limits/tensorlake-rate-limits.yml)
-- [Fin Ops](finops/tensorlake-finops.yml)
+- [Pricing](https://www.tensorlake.ai/pricing)
 - [Blog](https://www.tensorlake.ai/blog)
+- [GitHub](https://github.com/tensorlakeai)
 
-## Review
+## API Evangelist rating
 
-See [review.yml](review.yml) for the WebSocket assessment (answer: **no** documented public WebSocket API) and the confirmed-vs-modeled endpoint breakdown.
+**Kin Score 34.3** — thin · rubric 0.24.0 · scored 2026-10-17
 
-## Maintainers
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 55.5 |
+| Contract governance | 0.0 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 32.1 |
+| Access clarity | 42.1 |
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Agent readiness 19.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 10.9** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/tensorlake/](https://apis.io/providers/tensorlake/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Tensorlake: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/tensorlake/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
